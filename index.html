@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Xander's Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            width: 90%;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: black;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .logo {
+            margin-left: 20px;
+            font-size: 1.5em;
+        }
+
+        .nav-items {
+            margin-right: 20px;
+        }
+
+        .nav-items a {
+            color: black;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1em;
+        }
+
+        .nav-items a:hover {
+            text-decoration: underline;
+        }
+
+        .main-content {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .cta-button {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #555;
+        }
+
+        .content-container {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            margin-top: 30px;
+        }
+
+        .tradingview-widget-container {
+            width: 70%;
+        }
+
+        .news-container {
+            width: 25%;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 610px; /* Same height as TradingView */
+            font-size: 0.9em; /* Smaller font for better readability */
+        }
+
+        .news-container h2 {
+            text-align: center;
+            color: #007bff; /* Header color */
+            margin-bottom: 15px; /* Margin below the header */
+            font-size: 1.5em; /* Header size */
+            border-bottom: 2px solid #007bff; /* Bottom border for emphasis */
+            padding-bottom: 10px; /* Padding below the header */
+        }
+
+        .news-item {
+            margin: 15px 0;
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0; /* Light border between articles */
+        }
+
+        .news-item h3 {
+            font-size: 1.2em; /* Slightly larger title */
+            color: #333;
+            margin: 0 0 5px; /* Margin for spacing */
+        }
+
+        .news-item p {
+            margin: 5px 0; /* More spacing for description and other info */
+            color: #555;
+        }
+
+        .news-item a {
+            color: #007bff; /* Link color */
+            text-decoration: none; /* Remove underline */
+        }
+
+        .news-item a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Xander's Portfolio</div>
+        <div class="nav-items">
+            <a href="main.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="project.html">Projects</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <h1>Welcome to My Portfolio</h1>
+        <p>Hi, I'm Xander Balog, a business analyst transitioning into the world of trading and portfolio management. Explore my projects, skills, and experience, and feel free to get in touch!</p>
+        <a href="project.html" class="cta-button">View My Projects</a>
+    </div>
+
+    <div class="content-container">
+        <!-- TradingView Widget BEGIN -->
+        <div class="tradingview-widget-container">
+            <div id="tradingview_12345"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+            <script type="text/javascript">
+                new TradingView.widget({
+                    "width": "100%",
+                    "height": 610,
+                    "symbol": "SPY",
+                    "interval": "D",
+                    "timezone": "Etc/UTC",
+                    "theme": "light",
+                    "style": "1",
+                    "locale": "en",
+                    "toolbar_bg": "#f1f3f6",
+                    "enable_publishing": false,
+                    "allow_symbol_change": true,
+                    "container_id": "tradingview_12345"
+                });
+            </script>
+        </div>
+        <!-- TradingView Widget END -->
+
+        <!-- News Section BEGIN -->
+        <div class="news-container" id="news-container">
+            <h2>Latest Market News</h2>
+            <div id="news-content">
+                <!-- News articles will be dynamically populated here -->
+            </div>
+        </div>
+        <!-- News Section END -->
+    </div>
+
+    <script>
+        // Function to fetch news from APIs
+        async function fetchNews() {
+            const apiKey = '0339b96847474b21a7c37595ea998a71'; // Replace with your actual News API Key
+            const keywords = 'finance OR "stock market"';
+            const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(keywords)}&sortBy=publishedAt&apiKey=${apiKey}`; // Use keywords and sort by publication date
+    
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Fetched data:', data); // Log the fetched data
+    
+                const newsContainer = document.getElementById('news-content'); // Change this to news-content for innerHTML assignment
+                newsContainer.innerHTML = ''; // Clear previous news
+    
+                if (data.articles && data.articles.length > 0) {
+                    data.articles.forEach(article => {
+                        const newsItem = document.createElement('div');
+                        newsItem.classList.add('news-item'); // Add class for styling
+                        newsItem.innerHTML = `
+                            <h3>${article.title}</h3>
+                            <p>${article.description}</p>
+                            <p><strong>Source:</strong> ${article.source.name} | <strong>Published At:</strong> ${new Date(article.publishedAt).toLocaleString()}</p>
+                            <a href="${article.url}" target="_blank">Read more</a>
+                        `;
+                        newsContainer.appendChild(newsItem);
+                    });
+                } else {
+                    newsContainer.innerHTML += '<p>No articles found related to the search query.</p>'; // Display if no articles are found
+                }
+            } catch (error) {
+                console.error('Error fetching news:', error);
+                const newsContainer = document.getElementById('news-content'); // Change this to news-content for error message
+                newsContainer.innerHTML = '<p>Error fetching news. Please try again later.</p>';
+            }
+        }
+        
+        // Call the fetchNews function when the page loads
+        window.onload = fetchNews;
+
+    </script>
+
+    <footer style="background-color: black; color: white; text-align: center; padding: 10px 0; position: relative; bottom: 0; width: 100%;">
+        <h1> Pursue Passion, Avoid Comfort </h1>
+        <p>&copy; 2024 Xander Balog
+        </p>
+
+    </footer>
+
+</body>
+</html>
