@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Insights: Exploring a 52% Portfolio Return</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to external CSS file -->
+    <style>
+
+    
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2, h3 {
+            color: black;
+        }
+
+        h1 {
+        background-color: black; /* Black background for the title */
+        color: white; /* White text color */
+        padding: 20px; /* Increased padding for space inside */
+        text-align: center; /* Center the text */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+        margin-top: -20px; /* Moves the title higher on the page */
+        margin-bottom: 20px; /* Adds space below */
+        width: fit-content; /* Keep the title container to only as wide as the content */
+        margin-left: auto;
+        margin-right: auto; /* Centers the title horizontally */
+}
+
+
+        
+        /* Sidebar Styling */
+        .sidebar {
+    position: fixed; /* Keeps the sidebar fixed in position */
+    top: 100px; /* Below the nav */
+    left: 0;
+    width: 250px;
+    height: calc(100% - 50px); /* Fill height below nav */
+    background-color: #f4f4f4; /* Light gray background */
+    padding-top: 20px; /* Top padding for spacing */
+    padding-left: 20px; /* Left padding for spacing */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    z-index: 900; /* Ensure it stays below the nav; should be lower than nav's z-index */
+}
+
+.sidebar h2 {
+    font-size: 1.5em; /* Font size for headings */
+    color: #35a739; /* Heading color */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+.sidebar a {
+    text-decoration: none; /* No underline on links */
+    color: black; /* Link color */
+    display: block; /* Block display for full-width links */
+    margin: 10px 0; /* Vertical spacing between links */
+    font-size: 1.1em; /* Font size for links */
+    transition: color 0.3s; /* Smooth color transition on hover */
+}
+
+.sidebar a:hover {
+    color: #35a739; /* Change link color on hover */
+}
+
+p {
+    text-indent: 40px; /* Adjust the value as needed */
+    font-size: 1.10rem;
+    color: #202020;
+    margin-bottom: 30px; /* Increase this value to increase spacing between paragraphs */
+    line-height: 1.5; /* Adjust this value for line spacing */
+}
+
+        /* Content Area Styling */
+        .content {
+            margin-left: 270px; /* Space for sidebar */
+            padding: 20px;
+            margin-top: 60px; /* Space for nav */
+        }
+        li {
+        text-indent: 40px; /* Adjust the value as needed */
+        font-size: 1rem;
+        color: #202020;
+        margin-bottom: 20px; /* Increase this value to increase spacing between paragraphs */
+        line-height: 1.5; /* Adjust this value for line spacing */
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+
+        ul {
+            margin-left: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th, .table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f4f4f4; /* Background for header */
+        }
+        .image-container {
+    text-align: center;
+    margin: 20px auto; /* Center the container horizontally */
+    width: 800px; /* Set the desired width for the container */
+    height: auto; /* Remove the fixed height */
+    overflow: visible; /* Allow the full image to be displayed */
+}
+
+.image-container img {
+    max-width: 100%; /* Ensure the image scales responsively */
+    height: auto; /* Maintain aspect ratio */
+}
+
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Xander's Portfolio</div>
+        <div class="nav-items">
+            <a href="main.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="project.html">Projects</a>
+            <a href="contact.html">Contact</a>
+            <div class="dropdown">
+                <button class="dropbtn">Dashboards</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="loadDashboard('globalMarkets')">Global Markets/Indices</a>
+                    <a href="#" onclick="loadDashboard('forex')">Forex Dashboard</a>
+                    <a href="#" onclick="loadDashboard('crypto')">Crypto Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar for Table of Contents -->
+    <div class="sidebar">
+        <h2>Table of Contents</h2>
+        <a href="#introduction">Introduction</a>
+        <a href="#thesis">Thesis Statement</a>
+        <a href="#pa-explained">Portfolio Analysis Explained</a>
+        <a href="#findings">Key Findings</a>
+        <a href="#interpretation">Findings and Interpretation</a>
+        <a href="#implications">Implications for Investors</a>
+        <a href="#methodology">Methodology – Data Collection</a>
+        <a href="#commentary">Commentary</a>
+        <a href="#conclusion">Conclusion</a>
+    </div>
+
+    <!-- Main content -->
+    <div class="content">
+        <h1 id="introduction">Performance Insights: Exploring a 52% Portfolio Return</h1>
+
+        <!-- Image insert location -->
+    <div class="image-container">
+        <img src="52_insights.png" alt="Project 2 Graphic" />
+    </div>    
+    
+        <div class="section">
+            <h2 id="introduction">Introduction</h2>
+            <p>On September 18, 2024, Jerome Powell announced a historic rate cut, reducing the federal funds rate from 5.33% to a target range of 4.75% to 5%. This announcement triggered immediate reactions in equity markets, with companies like Carvana and Affirm experiencing significant increases, driven by their dependence on consumer borrowing. In contrast, cryptocurrencies such as Bitcoin and Ethereum displayed a delayed reaction but surged in the days following the news.
+                These market movements prompted an exploration of the broader impact of interest rates—not only on equities and cryptocurrencies but also on fixed-income assets like U.S. Treasury securities. To investigate this, I applied Principal Component Analysis (PCA) to discern the primary factors influencing movements in U.S. Treasury bills and notes. The main objective was to identify whether key influences, such as Federal Reserve decisions, account for the majority of the variance in Treasury yields and to assess how these insights can guide broader market strategies.
+                </p>
+        </div>
+
+        <div class="section">
+            <h2 id="thesis">Thesis Statement</h2>
+            <p>Principal Component Analysis (PCA) is a statistical method that simplifies complex datasets by identifying the most influential factors driving changes within the data. In financial markets, numerous variables—such as interest rates, inflation, and economic growth—affect asset prices. PCA uncovers which of these factors are most significant, allowing us to concentrate on the primary drivers of price movements.
+                To illustrate, consider describing a car’s movement. You could mention speed, direction, and fuel efficiency. However, if you had to choose one, you would likely focus on speed. Similarly, PCA identifies the "speed" of the dataset, highlighting the most critical factors while minimizing less relevant details. In this study, PCA enables us to determine which aspects of interest rates and yields are essential for explaining changes in U.S. Treasury yields.
+                </p>
+        </div>

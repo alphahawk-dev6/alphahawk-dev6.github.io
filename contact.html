@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Xander's Portfolio</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your external CSS file -->
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Xander's Portfolio</div>
+        <div class="nav-items">
+            <a href="main.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="project.html">Projects</a>
+            <a href="contact.html">Contact</a>
+            <div class="dropdown">
+                <button class="dropbtn">Dashboards</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="loadDashboard('globalMarkets')">Global Markets/Indices</a>
+                    <a href="#" onclick="loadDashboard('forex')">Forex Dashboard</a>
+                    <a href="#" onclick="loadDashboard('crypto')">Crypto Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Contact Me</title>
+        <style>
+            /* Carousel styles */
+.carousel-container {
+    position: relative;
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-images {
+    display: flex;
+    width: 100%; /* Adjusted to 200% since you only have two images */
+}
+
+.carousel-images img {
+    width: 50%; /* Set each image to take 50% of the carousel width */
+    height: 350px;
+    object-fit: cover; /* This ensures that the images fit well without stretching */
+}
+            /* Button styles */
+            .cool-button {
+                display: inline-block;
+                padding: 10px 20px;
+                background: linear-gradient(135deg, #ff416c, #ff4b2b);
+                color: white;
+                font-size: 18px;
+                border: none;
+                border-radius: 30px;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3);
+                text-decoration: none;
+            }
+    
+            .cool-button::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+                transform: rotate(45deg);
+                transition: all 0.5s;
+                pointer-events: none;
+            }
+    
+            .cool-button:hover::before {
+                top: -30%;
+                left: -30%;
+            }
+    
+            .cool-button:hover {
+                background: linear-gradient(135deg, #12b6bf, #47c6e9);
+                box-shadow: 0 10px 20px rgba(22, 165, 178, 0.813);
+            }
+    
+            /* Sparkle effect */
+            .sparkle {
+                position: absolute;
+                background: white;
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                animation: sparkle 1s infinite;
+            }
+    
+            @keyframes sparkle {
+                0% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                50% {
+                    transform: scale(1.5);
+                    opacity: 0;
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+    
+            .sparkle:nth-child(1) {
+                top: 10px;
+                left: 20px;
+                animation-delay: 0.2s;
+            }
+    
+            .sparkle:nth-child(2) {
+                top: 30px;
+                left: 50px;
+                animation-delay: 0.4s;
+            }
+    
+            .sparkle:nth-child(3) {
+                top: 20px;
+                right: 20px;
+                animation-delay: 0.6s;
+            }
+    
+            .sparkle:nth-child(4) {
+                bottom: 10px;
+                left: 30px;
+                animation-delay: 0.8s;
+            }
+    
+            .sparkle:nth-child(5) {
+                bottom: 20px;
+                right: 40px;
+                animation-delay: 1s;
+            }
+        </style>
+    </head>
+    <body>
+    
+        <div class="main-content">
+            <h1>Contact Me</h1>
+    
+            <!-- Carousel -->
+            <div class="carousel-container">
+                <div class="carousel-images">
+                    <img src="DALLE_QT.webp" alt="Machine Learning">
+                    <img src="DALLE_ML.webp" alt="Finance">
+                </div>
+            </div>
+    
+            <!-- Button and text -->
+            <div class="section contact-content">
+                <h2>Get in Touch</h2>
+                <p>I’m always open to discussing new opportunities, collaborations, or any questions you may have. Feel free to connect with me on LinkedIn, and communicate with me through there!</p>
+                <a href="https://www.linkedin.com/in/alexander-balog1510/" target="_blank" class="cool-button">
+                    Connect on LinkedIn
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                </a>
+            </div>
+        </div>
+    
+        <!-- JavaScript for Carousel -->
+        <script>
+            let currentIndex = 0;
+            const images = document.querySelector('.carousel-images');
+            const totalImages = images.children.length;
+    
+            setInterval(() => {
+                currentIndex = (currentIndex) % totalImages;
+                images.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }, 3000); // Change image every 3 seconds
+        </script>
+    
+
+    <footer>
+        <h1> Pursue Passion, Avoid Comfort </h1>
+        <p>&copy; 2024 Xander Balog</p>
+    </footer>
+
+    <script>
+        function loadDashboard(dashboard) {
+            const container = document.getElementById('dashboard-container');
+            container.innerHTML = ''; // Clear previous dashboard content
+
+            if (dashboard === 'globalMarkets') {
+                container.innerHTML = '<h2>Global Markets/Indices</h2>';
+            } else if (dashboard === 'forex') {
+                container.innerHTML = '<h2>Forex Dashboard</h2>';
+            } else if (dashboard === 'crypto') {
+                container.innerHTML = '<h2>Crypto Dashboard</h2>';
+            }
+        }
+    </script>
+
+</body>
+</html>

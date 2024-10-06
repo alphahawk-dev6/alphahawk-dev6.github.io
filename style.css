@@ -1,0 +1,331 @@
+/* General Reset and Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+/* Navigation Bar Styles */
+nav {
+    width: 90%;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin: 20px auto;
+}
+
+.logo {
+    margin-left: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.nav-items {
+    margin-right: 20px;
+    position: relative;
+}
+
+.nav-items a {
+    color: black;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 1em;
+    transition: color 0.3s;
+}
+
+.nav-items a:hover {
+    text-decoration: underline;
+    color: #007BFF;
+}
+
+/* Dropdown Styles */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: #000000;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Main Content and Section Styles */
+.main-content {
+    width: 90%;
+    margin: 20px auto;
+}
+
+.section {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Footer Styles */
+footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Contact Form Styles */
+.contact-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact-form {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 1em;
+}
+
+.contact-form button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.contact-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Main Content and Section Styles */
+.main-content {
+    width: 90%;
+    margin: 20px auto; /* Center main content */
+}
+
+.section {
+    background-color: #f9f9f9; /* Light background for sections */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Inner spacing */
+    margin-bottom: 20px; /* Spacing between sections */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+}
+
+h2 {
+    text-align: center; /* Center align all h2 elements */
+    margin: 20px 0; /* Spacing above and below the titles */
+}
+
+/* About Content */
+.about-content {
+    display: flex; /* Flexbox for layout */
+    align-items: flex-start; /* Align items to the top */
+    justify-content: space-between; /* Add space between text and photo */
+    gap: 40px; /* Add space between the text and photo */
+    width: 100%; /* Take up full width */
+}
+
+.about-text {
+    flex: 2; /* Make the text section take more space */
+    font-size: 1.1em; /* Slightly increase the font size */
+    line-height: 1.6; /* Improve readability with line height */
+}
+
+.about-photo {
+    flex: 1; /* The image takes 1 part of the available space */
+    overflow: hidden; /* Hide overflow */
+}
+
+.about-photo img {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio of the image */
+    object-fit: cover;
+    border-radius: 8px; /* Keep rounded corners */
+}
+/* Main Content Styles */
+.main-content {
+    width: 100%; /* Increase the width to take up the full space */
+    max-width: 1200px; /* Adjust the maximum width to make it wider */
+    margin: 20px auto; /* Center the content */
+    text-align: left; /* Left-align text for better readability */
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+}
+
+h1 {
+    font-size: 3em; /* Make the heading larger */
+}
+.project-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for responsive design */
+    justify-content: space-around; /* Space items evenly */
+    margin: 20px 0;
+}
+
+.project-button {
+    width: 30%; /* Adjust width for 3 projects per row */
+    margin: 10px; /* Spacing between project buttons */
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s; /* Animation on hover */
+}
+
+.project-button:hover {
+    transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+.project-button img {
+    max-width: 100%; /* Responsive image */
+    border-radius: 10px; /* Round corners for images */
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+p {
+    font-size: 1em;
+    color: #202020;
+}
+
+.cta-button {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 20px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #555;
+}
+
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin-top: 30px;
+}
+
+.tradingview-widget-container {
+    width: 70%;
+}
+
+.news-container {
+    width: 25%;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 610px;
+    font-size: 0.9em;
+}
+
+.news-container h2 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+.news-item {
+    margin: 15px 0;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.news-item h3 {
+    font-size: 1.2em;
+    color: #333;
+    margin: 0 0 5px;
+}
+
+.news-item p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.news-item a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.news-item a:hover {
+    text-decoration: underline;
+}

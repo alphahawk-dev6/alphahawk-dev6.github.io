@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Xander's Portfolio</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to external CSS file -->
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Xander's Portfolio</div>
+        <div class="nav-items">
+            <a href="main.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="project.html">Projects</a>
+            <a href="contact.html">Contact</a>
+            <div class="dropdown">
+                <button class="dropbtn">Dashboards</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="loadDashboard('globalMarkets')">Global Markets/Indices</a>
+                    <a href="#" onclick="loadDashboard('forex')">Forex Dashboard</a>
+                    <a href="#" onclick="loadDashboard('crypto')">Crypto Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <h1>About Me</h1>
+        <div class="section about-content">
+            <div class="about-text">
+                <p>Hey! My name is Xander Balog, and I am a business analyst/data analyst by training, now attempting to transition into trading, portfolio management, and investment management. My journey began with a deep passion for data-driven decision-making, cultivated through rigorous academic programs and hands-on experience.</p>
+
+                <h2>Education</h2>
+                <p>I’m currently pursuing my Master of Science in Business Analytics (MSBA) at Carnegie Mellon University's Tepper School of Business, where I’m honing my analytical and problem-solving skills. This interdisciplinary program equips me with the ability to turn complex data into actionable insights, a skillset I’m eager to apply in the investment world.</p>
+
+                <p>I hold a Bachelor of Business Administration in Business Analytics and Information Systems from Suffolk University, where I graduated Summa Cum Laude. During my time there, I was deeply involved in both academic and extracurricular activities, including leading performance analytics initiatives and participating in investing competitions. These experiences laid the foundation for my technical skills in coding, predictive analytics, and data-driven decision-making.</p>
+
+                <h2>Professional Experience</h2>
+                <p>Over the years, I’ve worked across multiple industries, including internships in data science, flood hazard management, and performance analytics. These roles allowed me to sharpen my technical skills in Python, R, SQL, and cloud computing, while also fostering my ability to develop models and tools that optimize operations and asset management.</p>
+
+                <p>One pivotal experience was my role as Co-founder and President of Strategic Alternative Investments & Learning (SAIL), where I led a team in developing quantitative trading strategies, performing risk management, and analyzing market trends. This hands-on leadership experience fueled my want to transition from data analysis to portfolio and investment management, or even trading. I also participated in competitive stock pitch and investment competitions, consistently achieving high returns through a mix of quantitative analysis and strategic thinking.</p>
+
+                <h2>Vision</h2>
+                <p>With a solid background in data analytics and a growing expertise in financial markets, I’m driven by a vision to combine these disciplines and build successful, data-backed trading and investment strategies. My goal is to leverage my analytical skills, market insight, and passion for finance to create value and deliver strong portfolio performance.</p>
+
+                <h2>Connect</h2>
+                <p>I look forward to connecting with like-minded professionals and collaborating on opportunities in portfolio management, trading, and investment management.</p>
+            </div>
+            <div class="about-photo">
+                <img src="1.jpg" alt="Xander Balog">
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <h1> Pursue Passion, Avoid Comfort </h1>
+        <p>&copy; 2024 Xander Balog</p>
+    </footer>
+
+    <script>
+        function loadDashboard(dashboard) {
+            const container = document.getElementById('dashboard-container');
+            container.innerHTML = ''; // Clear previous dashboard content
+
+            if (dashboard === 'globalMarkets') {
+                container.innerHTML = '<h2>Global Markets/Indices</h2>'; // Placeholder content
+            } else if (dashboard === 'forex') {
+                container.innerHTML = '<h2>Forex Dashboard</h2>'; // Placeholder content
+            } else if (dashboard === 'crypto') {
+                container.innerHTML = '<h2>Crypto Dashboard</h2>'; // Placeholder content
+            }
+        }
+    </script>
+</body>
+</html>

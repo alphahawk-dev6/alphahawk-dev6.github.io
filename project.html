@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Xander's Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Include Owl Carousel CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    
+    <style>
+        /* Skills carousel styles */
+        .skills-carousel {
+            text-align: center;
+            padding: 40px 20px; /* Padding for top and bottom */
+            background-color: #f4f4f4; /* Light background for contrast */
+        }
+
+        .skills-carousel h2 {
+            font-size: 2em; /* Larger title */
+            margin-bottom: 20px; /* Space below title */
+            color: #333; /* Darker color for readability */
+        }
+
+        .owl-carousel .item {
+            background: black; /* Dark background for items */
+            color: white; /* White text for contrast */
+            padding: 40px; /* Increased padding for larger items */
+            border-radius: 10px; /* Rounded corners */
+            text-align: center;
+            font-size: 1.5em; /* Larger font size */
+            transition: transform 0.3s, background 0.3s; /* Smooth transition */
+        }
+
+        .owl-carousel .item:hover {
+            background: #444; /* Slightly lighter on hover */
+            transform: scale(1.1); /* Scale effect on hover */
+        }
+
+        /* Dots and navigation styles */
+        .owl-dots {
+            margin-top: 20px; /* Space between carousel and dots */
+        }
+
+        .owl-dot {
+            background: #333; /* Default dot color */
+            border-radius: 50%; /* Circular dots */
+            width: 10px; /* Dot size */
+            height: 10px; /* Dot size */
+            margin: 0 5px; /* Space between dots */
+            transition: background 0.3s; /* Smooth transition */
+        }
+
+        .owl-dot.active {
+            background: #007bff; /* Active dot color */
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Xander's Portfolio</div>
+        <div class="nav-items">
+            <a href="main.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="project.html">Projects</a>
+            <a href="contact.html">Contact</a>
+            <div class="dropdown">
+                <button class="dropbtn">Dashboards</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="loadDashboard('globalMarkets')">Global Markets/Indices</a>
+                    <a href="#" onclick="loadDashboard('forex')">Forex Dashboard</a>
+                    <a href="#" onclick="loadDashboard('crypto')">Crypto Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <h1>Projects</h1>
+        <div class="project-container">
+            <div class="project-button" onclick="location.href='project1.html'">
+                <img src="Designer.png" alt="Project 1 Graphic">
+                <h3>Decoding Treasury Yields: Insights from Principal Component Analysis</h3>
+                <p>This project uses Principal Component Analysis to identify the hidden factors driving U.S. Treasury yields, offering insights into how interest rate changes specifically impact government yields for fixed-income investors.</p>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <h1> Upcoming Releases</h1>
+        <div class="project-container">
+            <div class="project-button" onclick="location.href='#project2.html'">
+                <img src="52_insights.png" alt="Project 2 Graphic">
+                <h3>Performance Insights: Exploring a 52% Portfolio Return</h3>
+                <p>This project analyzes a high-performing portfolio that achieved a 52% return in just two months. It delves into key metrics such as expected returns, Sharpe ratio, standard deviation, stock correlations, and maximum drawdowns to provide a comprehensive understanding of the portfolio's risk and performance profile.</p>
+            </div>
+            <div class="project-button" onclick="location.href='project3.html'">
+                <img src="Black-Scholes-Model_1.png" alt="Project 3 Graph">
+                <h3>Options Pricing Model: Analyzing Market Dynamics and Risk Assessment</h3>
+                <p>This project focuses on developing an options pricing model that leverages financial theories and quantitative methods to analyze market dynamics. The aim is to accurately price various options and assess the associated risks.</p>
+            </div>
+            <div class="project-button" onclick="location.href='project3.html'">
+                <img src="oil_rigs_APA_1.jpg" alt="Oil Rigs with Sunset">
+                <h3>Diamond in the Rough - Exploring the strategic positioning of APA Corporation</h3>
+                <p>This project conducts a comprehensive financial analysis of APA Corporation, utilizing a Discounted Cash Flow (DCF) model to estimate its intrinsic value. It explores key factors such as industry dynamics, company performance metrics, and valuation insights to provide a robust investment pitch and strategic recommendations.</p>
+            </div>
+        </div>
+    </div>
+    <div>
+    <!-- Skills Carousel -->
+    <section id="skills-carousel" class="skills-carousel">
+        <h2>Technical Skills</h2>
+        <div class="owl-carousel owl-theme">
+            <div class="item"><h4>HTML </h4></div>
+            <div class="item"><h4>SQL</h4></div>
+            <div class="item"><h4>Tableau</h4></div>
+            <div class="item"><h4>R</h4></div>
+            <div class="item"><h4>Microsoft Excel</h4></div>
+            <div class="item"><h4>PowerBi</h4></div>
+            <div class="item"><h4>Python </h4></div>
+        </div>
+    </section>
+    </div>
+    
+
+    <!-- Include jQuery and Owl Carousel JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <!-- Initialize Owl Carousel -->
+    <script>
+$('.owl-carousel').owlCarousel({
+    loop: false, // Stop the cloning behavior
+    margin: 20,
+    rewing: true,
+    nav: true,
+    autoplay: true,
+    autoplayTimeout: 2500,
+    autoplayHoverPause: true,
+    responsive: {
+        0: {
+            items: 1
+        },
+        600: {
+            items: 2
+        },
+        1000: {
+            items: 3
+        },
+        1200: {
+            items: 6 // Adjust this to match the number of items you have
+        }
+    }
+});
+
+
+
+
+        function loadDashboard(dashboard) {
+            const container = document.getElementById('dashboard-container');
+            container.innerHTML = ''; // Clear previous dashboard content
+
+            if (dashboard === 'globalMarkets') {
+                container.innerHTML = '<h2>Global Markets/Indices</h2>'; // Placeholder content
+            } else if (dashboard === 'forex') {
+                container.innerHTML = '<h2>Forex Dashboard</h2>'; // Placeholder content
+            } else if (dashboard === 'crypto') {
+                container.innerHTML = '<h2>Crypto Dashboard</h2>'; // Placeholder content
+            }
+        }
+    </script>    
+    <footer>
+        <h2>Pursue Passion, Avoid Comfort</h2>
+        <p>&copy; 2024 Xander Balog</p>
+    </footer>
+</body>
+</html>

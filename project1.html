@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Principal Component Analysis: Interest Rates, Treasury Yields, and Current Outlook</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to external CSS file -->
+    <style>
+
+    
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2, h3 {
+            color: black;
+        }
+
+        h1 {
+        background-color: black; /* Black background for the title */
+        color: white; /* White text color */
+        padding: 20px; /* Increased padding for space inside */
+        text-align: center; /* Center the text */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+        margin-top: -20px; /* Moves the title higher on the page */
+        margin-bottom: 20px; /* Adds space below */
+        width: fit-content; /* Keep the title container to only as wide as the content */
+        margin-left: auto;
+        margin-right: auto; /* Centers the title horizontally */
+}
+
+
+        
+        /* Sidebar Styling */
+        .sidebar {
+    position: fixed; /* Keeps the sidebar fixed in position */
+    top: 100px; /* Below the nav */
+    left: 0;
+    width: 250px;
+    height: calc(100% - 50px); /* Fill height below nav */
+    background-color: #f4f4f4; /* Light gray background */
+    padding-top: 20px; /* Top padding for spacing */
+    padding-left: 20px; /* Left padding for spacing */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    z-index: 900; /* Ensure it stays below the nav; should be lower than nav's z-index */
+}
+
+.sidebar h2 {
+    font-size: 1.5em; /* Font size for headings */
+    color: #2eb9d5; /* Heading color */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+.sidebar a {
+    text-decoration: none; /* No underline on links */
+    color: black; /* Link color */
+    display: block; /* Block display for full-width links */
+    margin: 10px 0; /* Vertical spacing between links */
+    font-size: 1.1em; /* Font size for links */
+    transition: color 0.3s; /* Smooth color transition on hover */
+}
+
+.sidebar a:hover {
+    color: #2eb9d5; /* Change link color on hover */
+}
+
+p {
+    text-indent: 40px; /* Adjust the value as needed */
+    font-size: 1.10rem;
+    color: #202020;
+    margin-bottom: 30px; /* Increase this value to increase spacing between paragraphs */
+    line-height: 1.5; /* Adjust this value for line spacing */
+}
+
+        /* Content Area Styling */
+        .content {
+            margin-left: 270px; /* Space for sidebar */
+            padding: 20px;
+            margin-top: 60px; /* Space for nav */
+        }
+        li {
+        text-indent: 40px; /* Adjust the value as needed */
+        font-size: 1rem;
+        color: #202020;
+        margin-bottom: 20px; /* Increase this value to increase spacing between paragraphs */
+        line-height: 1.5; /* Adjust this value for line spacing */
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+
+        ul {
+            margin-left: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th, .table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f4f4f4; /* Background for header */
+        }
+        .image-container {
+    text-align: center;
+    margin: 20px auto; /* Center the container horizontally */
+    width: 800px; /* Set the desired width for the container */
+    height: auto; /* Remove the fixed height */
+    overflow: visible; /* Allow the full image to be displayed */
+}
+
+.image-container img {
+    max-width: 100%; /* Ensure the image scales responsively */
+    height: auto; /* Maintain aspect ratio */
+}
+
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Xander's Portfolio</div>
+        <div class="nav-items">
+            <a href="main.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="project.html">Projects</a>
+            <a href="contact.html">Contact</a>
+            <div class="dropdown">
+                <button class="dropbtn">Dashboards</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="loadDashboard('globalMarkets')">Global Markets/Indices</a>
+                    <a href="#" onclick="loadDashboard('forex')">Forex Dashboard</a>
+                    <a href="#" onclick="loadDashboard('crypto')">Crypto Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar for Table of Contents -->
+    <div class="sidebar">
+        <h2>Table of Contents</h2>
+        <a href="#introduction">Introduction</a>
+        <a href="#thesis">Thesis Statement</a>
+        <a href="#pca-explained">Principal Component Analysis Explained</a>
+        <a href="#pca-treasury">PCA on U.S. Treasury Bills and Notes</a>
+        <a href="#findings">Key Findings</a>
+        <a href="#interpretation">Findings and Interpretation</a>
+        <a href="#implications">Implications for Investors</a>
+        <a href="#methodology">Methodology – Data Collection</a>
+        <a href="#commentary">Commentary</a>
+        <a href="#conclusion">Conclusion</a>
+        <a href="#sources and disclosures">Sources and Disclosures</a>
+    </div>
+
+    <!-- Main content -->
+    <div class="content">
+        <h1 id="introduction">Principal Component Analysis: Interest Rates, Treasury Yields, and Current Outlook</h1>
+
+        <!-- Image insert location -->
+    <div class="image-container">
+        <img src="Designer.png" alt="Description of the image" />
+    </div>    
+    
+        <div class="section">
+            <h2 id="introduction">Introduction</h2>
+            <p>On September 18, 2024, Jerome Powell announced a historic rate cut, reducing the federal funds rate from 5.33% to a target range of 4.75% to 5%. This announcement triggered immediate reactions in equity markets, with companies like Carvana and Affirm experiencing significant increases, driven by their dependence on consumer borrowing. In contrast, cryptocurrencies such as Bitcoin and Ethereum displayed a delayed reaction but surged in the days following the news.
+                These market movements prompted an exploration of the broader impact of interest rates—not only on equities and cryptocurrencies but also on fixed-income assets like U.S. Treasury securities. To investigate this, I applied Principal Component Analysis (PCA) to discern the primary factors influencing movements in U.S. Treasury bills and notes. The main objective was to identify whether key influences, such as Federal Reserve decisions, account for the majority of the variance in Treasury yields and to assess how these insights can guide broader market strategies.
+                </p>
+        </div>
+
+        <div class="section">
+            <h2 id="thesis">Thesis Statement</h2>
+            <p>Principal Component Analysis (PCA) is a statistical method that simplifies complex datasets by identifying the most influential factors driving changes within the data. In financial markets, numerous variables—such as interest rates, inflation, and economic growth—affect asset prices. PCA uncovers which of these factors are most significant, allowing us to concentrate on the primary drivers of price movements.
+                To illustrate, consider describing a car’s movement. You could mention speed, direction, and fuel efficiency. However, if you had to choose one, you would likely focus on speed. Similarly, PCA identifies the "speed" of the dataset, highlighting the most critical factors while minimizing less relevant details. In this study, PCA enables us to determine which aspects of interest rates and yields are essential for explaining changes in U.S. Treasury yields.
+                </p>
+        </div>
+
+        <div class="section">
+            <h2 id="pca-explained">Principal Component Analysis Explained</h2>
+            <p>Principal Component Analysis (PCA) is a statistical method that simplifies complex datasets by identifying the most influential factors driving changes within the data. In financial markets, numerous variables—such as interest rates, inflation, and economic growth—affect asset prices. PCA uncovers which of these factors are most significant, allowing us to concentrate on the primary drivers of price movements.
+                To illustrate, consider describing a car’s movement. You could mention speed, direction, and fuel efficiency. However, if you had to choose one, you would likely focus on speed. Similarly, PCA identifies the "speed" of the dataset, highlighting the most critical factors while minimizing less relevant details. In this study, PCA enables us to determine which aspects of interest rates and yields are essential for explaining changes in U.S. Treasury yields.
+                </p>
+            <h2>Key Steps in the PCA Process:</h2>
+            <ul>
+                <li><strong>Standardization:</strong> All data is scaled to prevent larger values from overshadowing smaller ones.</li>
+                <li><strong>Covariance Matrix:</strong> Illustrates how different yields move in relation to each other.</li>
+                <li><strong>Eigenvectors and Eigenvalues:</strong> Represent the "directions" of the data...</li>
+                <li><strong>Principal Components:</strong> New variables that capture the majority of changes observed in yields.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 id="pca-treasury">PCA on U.S. Treasury Bills and Notes</h2>
+            <p>For this report, I analyzed six securities: two U.S. Treasury bills and four U.S. Treasury notes, which are critical instruments the U.S. government uses to finance its debt. The securities examined included:</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Security</th>
+                        <th>Maturity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>3-month Treasury bill</td>
+                        <td>3 months</td>
+                    </tr>
+                    <tr>
+                        <td>6-month Treasury bill</td>
+                        <td>6 months</td>
+                    </tr>
+                    <tr>
+                        <td>1-year Treasury note</td>
+                        <td>1 year</td>
+                    </tr>
+                    <tr>
+                        <td>3-year Treasury note</td>
+                        <td>3 years</td>
+                    </tr>
+                    <tr>
+                        <td>5-year Treasury note</td>
+                        <td>5 years</td>
+                    </tr>
+                    <tr>
+                        <td>10-year Treasury note</td>
+                        <td>10 years</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 id="findings">Key Findings</h2>
+
+            <div class="image-container">
+                <img src="HTML Code/key_findings_PCA_1.png" alt="Description of the image" />
+            </div> 
+
+            <p>The PCA results reveal that the first principal component (PC1) explains approximately 95% of the variance in Treasury yields. 
+                This significant finding indicates that overall interest rate levels—largely shaped by Federal Reserve policy—are the primary driver of yield changes across all maturities. The second principal component (PC2) accounts for about 4.6% of the variance, likely representing the slope of the yield curve, while the third component (PC3) captures a mere 0.2%, possibly reflecting specific factors influencing particular maturities.</p>
+        </div>
+
+        <div class="section">
+            <h2 id="interpretation">Findings and Interpretation</h2>
+
+            <div class="image-container">
+                <img src="HTML Code/Findings_PCA_2.png" alt="Description of the image" />
+            </div> 
+
+            <ul>
+                <li><strong>First Principal Component (PC1):</strong> PC1 explains 95% of the variance, highlighting that most Treasury yield movements are driven by changes in overall interest rates. This component likely reflects the influence of macroeconomic factors, particularly Federal Reserve monetary policy. As the Fed adjusts rates, yields on both short- and long-term Treasuries tend to move in tandem, reinforcing the dominant effect of this component.</li>
+                <li><strong>Second Principal Component (PC2):</strong> PC2, accounting for 4.6% of the variance, likely captures the “slope” of the yield curve. A steep yield curve indicates higher long-term rates compared to short-term ones, suggesting optimism about future economic growth. Conversely, a flat or inverted yield curve may signal economic uncertainty or expectations of slower growth. This component elucidates how short- and long-term yields respond differently to interest rate changes and economic conditions.</li>
+                <li><strong>Third Principal Component (PC3):</strong> PC3 explains a negligible portion of the variance (0.2%), likely representing idiosyncratic factors tied to specific maturities, such as variations in inflation expectations or risk preferences. For example, longer-term notes might be more sensitive to long-term inflation trends, while short-term bills may react more swiftly to immediate rate adjustments.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 id="implications">Implications for Investors</h2>
+
+            <div class="image-container">
+                <img src="HTML Code/InterestRates_PCA_3.png" alt="Description of the image" />
+            </div> 
+            <p>Understanding the Federal Reserve’s interest rate policy is crucial for predicting movements in U.S. Treasury yields. Given that the first principal component accounts for nearly all the variance, overall rate levels—determined by Fed decisions—are the primary drivers of yield fluctuations. Investors should monitor macroeconomic indicators like inflation expectations and economic growth forecasts to anticipate changes in Treasury yields.
+                Additionally, PCA offers valuable insights for shaping trading strategies. For instance, if a rate cut by the Federal Reserve is anticipated, investors might expect a more rapid decline in short-term yields relative to long-term yields, steepening the yield curve. Conversely, rising inflation expectations could lead to an increase in long-term yields compared to short-term ones, flattening the curve.
+                </p>
+                <p>
+                    Additionally, PCA offers valuable insights for shaping trading strategies. For instance, if a rate cut by the Federal Reserve is anticipated, investors might expect a more rapid decline in short-term yields relative to long-term yields, steepening the yield curve. Conversely, rising inflation expectations could lead to an increase in long-term yields compared to short-term ones, flattening the curve.
+                    </p>
+        </div>
+
+        <div class="section">
+            <h2 id="methodology">Methodology – Data Collection</h2>
+            <p>To start, I loaded the libraries required for data manipulation, visualization, and PCA. Specifically: 
+                -	Pandas for handling and cleaning data
+                -	Matplotlib for visualizing the results
+                -	Sklearn for performing the PCA analysis
+                I also identified which treasury yields I wanted to examine and created a data dictionary to store those values.</p>
+                <div class="image-container">
+                    <img src="method_PCA_1.png" alt="Description of the image" />
+                </div>
+            <p>I then collected the relevant data on U.S, treasury yields (including treasury bills and notes) from the Federal Reserve Economic Data (FRED) database. I defined my start and end dates for the entire dataset and looped through the series to gather the data for each bill and bond. 
+                <div class="image-container">
+                    <img src="method_PCA_2.png" alt="Description of the image" />
+                </div>
+            <p>This code outputted the first and last few rows of the data frame that contains the values for the treasury bills from 1990-01-01 to 2024-08-01. This data was presented as:
+                <div class="image-container">
+                    <img src="method_PCA_3.png" alt="Description of the image" />
+                </div>
+            <p>Before beginning my analysis, I decided to clean the data by ensuring each data type was the same across all values, and by removing any missing or null values.
+                <div class="image-container">
+                    <img src="method_PCA_4.png" alt="Description of the image" />
+                </div>
+                <div class="image-container">
+                    <img src="method_PCA_5.png" alt="Description of the image" />
+                </div>
+            <p>From here, I displayed the summary statistics of my data frame, to have a better understanding of what was being presented to me, and if I could find any glaring discrepancies in the data before I normalized it and modelled it out. 
+                <div class="image-container">
+                    <img src="method_PCA_6.png" alt="Description of the image" />
+                </div>
+            <p>A few observations that may come in handy later:
+                -	Each treasury bill and note has the same count, which reflects consistency across the dataset.
+                -	The mean yields of the treasury bills are lower than those of the treasury notes.
+                -	The standard deviation of treasury bills is higher than that of treasury notes.
+                -	The minimum yield of the treasury bills is lower than that of the treasury notes, while the maximum yield of the treasury notes is much higher than that of the bills.
+                Next, I normalized the data. Since PCA works best when the data is on the same scale, I normalized the treasury yields using StandardScaler. Normalization ensures that differences in magnitude between yields of different maturities don’t disproportionately influence the principal components.
+                Normalization was necessary because a 10-year bond yield might naturally have higher values than a 3-month treasury bill yield, but that doesn’t mean it’s more important. 
+                <div class="image-container">
+                    <img src="method_PCA_7.png" alt="Description of the image" />
+                </div>
+            <p>I then determined how many principal components to examine. In PCA, each component captures a portion of the variance in the data. I initially defined six components, which allowed me to examine how much of the data's variance could be explained by these principal axes.
+                The goal was to see which factors (or combinations of yield maturities) drive the overall yield movements. 
+                After defining the components, I applied the PCA transformation to the normalized treasury yield data. This transformation generated a set of six principal components that represented the data in a reduced dimensionality form.
+                These components are linear combinations of the original yields and represent the underlying patterns that influence the movement of treasury yields.
+                <div class="image-container">
+                    <img src="method_PCA_8.png" alt="Description of the image" />
+                </div>
+            <p>With a general understanding of the influences of each principal component, I was curious how deeply each component affected each yield. I settled with displaying a brief overview of the PCA model, which included the number of observations (which we saw earlier), the number of variables (6), and the number of principal components selected for the analysis (6). 
+                Next, the proportion of variance explained by each principal component is calculated and printed. This shows how much of the total variance in the data is captured by each principal component, helping to understand the significance of each component in summarizing the dataset. Additionally, the cumulative proportion of variance is computed, showing how much of the total variance is explained as we add more components.
+                Finally, the factor loadings (or eigenvectors) are calculated and stored. These loadings show the relationship between the original variables (in this case, treasury yields) and the principal components. It allows us to interpret how each yield contributes to each principal component. These loadings are displayed in a table where the rows represent the original variables, and the columns represent the principal components.
+                <div class="image-container">
+                    <img src="method_PCA_9.png" alt="Description of the image" />
+                </div>
+                <div class="image-container">
+                    <img src="method_PCA_10.png" alt="Description of the image" />
+                </div>
+            <p>I created visualizations of the top 3 principal components over time to show how they evolved during the period under analysis. This provides a clear visual representation of how the key underlying drivers of yield movements have changed, offering insights into how different factors like inflation expectations or market risk preferences have influenced the treasury market.
+       include PCA graph         
+                <div class="image-container">
+                    <img src="method_PCA_11.png" alt="Description of the image" />
+                </div>
+                <div class="image-container">
+                    <img src="key_findings_PCA_1.png" alt="Description of the image" />
+                </div>
+            <p>By visualizing these components, we can observe whether certain market events (e.g., Federal Reserve policy changes) have a significant influence on these components.
+                This analysis concluded our exploration of principal components, but it left me contemplating what factor could account for 95% of the movements in an asset class with over $26 trillion invested in it. After further reflection, I identified the Federal Funds Rate as a likely key component. By comparing the rate against treasury yields, both T-bills and T-notes, I anticipated uncovering more insight into how these movements are influenced. This could also help explain one of the three primary components identified in the PCA.
+                To refine the analysis, I incorporated Federal Funds Rate data and applied the same cleaning process to remove any missing values or inconsistencies. The Federal Funds Rate is a critical benchmark for short-term interest rates, and its impact on treasury yields is particularly pronounced at the shorter end of the yield curve.
+                <div class="image-container">
+                    <img src="method_PCA_13.png" alt="Description of the image" />
+                </div>
+                <div class="image-container">
+                    <img src="method_PCA_14.png" alt="Description of the image" />
+                </div>
+            <p>With this data cleaned and now accessible, I plotted both the treasury yields and the Federal Funds Rate to examine their relationship and correlation over time. The goal here was to see how changes in the Federal Funds Rate influence treasury yields across different maturities, particularly in the context of the principal components identified earlier.
+                <div class="image-container">
+                    <img src="method_PCA_15.png" alt="Description of the image" />
+                </div>
+                <div class="image-container">
+                    <img src="method_PCA_16.png" alt="Description of the image" />
+                </div>
+            </p>
+        </div>
+        <div class="section">
+            <h2 id="commentary">Commentary</h2>
+            <div class="image-container">
+                <img src="Commentary_PCA_4.png" alt="Description of the image" />
+            </div> 
+            <p>I want to direct our attention back to the summary statistics I pointed out earlier, specifically the mean, standard deviation, and maximum & minimum. 
+            <p> When evaluating the mean yields of each of these securities, we can see a gradual increase as the expiration of the security appears further away. This observation aligns with typical market dynamics. Treasury bills are short-term debt securities (e.g., 3-month, 6-month maturities) and usually offer lower yields compared to treasury bonds, which are long-term securities (e.g., 10-year, 30-year maturities). The lower mean for bills is expected since investors typically demand higher compensation (yield) for taking on the risk of longer maturities, such as exposure to inflation, interest rate changes, and overall economic uncertainty. This supports the notion of the upward-sloping yield curve in normal market conditions, where longer-term bonds have higher yields than short-term bills. </p>
+            <p> Currently, GS10 and GS5 yields are at least 100 basis points off our short-term debt securities. As someone who has very little experience analyzing yield curves, interest rates, and economics in a live environment, this was jarring when comparing it to our summary statistics. I eventually found out this is a phenomenon referred to as an inverted yield curve, and it occurs when investors believe they are taking on more risk in the near term, versus in the future (which would be investments into 5 year and 10-year notes, hence the larger means). </p>
+            <p> On the volatility side, i.e. the std (standard deviation) in our summary statistics, treasury bills boast a higher standard deviation. This higher standard deviation indicates that short-term yields tend to experience more variability or volatility than long-term bond yields. This makes sense given that treasury bills are more sensitive to changes in short-term economic conditions and Federal Reserve policy decisions, such as interest rate hikes or cuts. The short-term nature of bills means their yields adjust more quickly to current market conditions, whereas long-term bonds generally reflect broader trends in inflation and growth expectations, leading to more stability. This volatility can be particularly important in environments with frequent changes in monetary policy or uncertainty about the short-term economic outlook, which, given inflation data, and the current Fed policy, may be experienced the coming months. </p>
+                </p>
+        </div>
+        <div class="section">
+            <h2 id="conclusion">Conclusion</h2>
+            <p>The Principal Component Analysis (PCA) conducted on U.S. Treasury bills and notes offers key insights into the influence of interest rates, especially Federal Reserve policies, on Treasury yields. The results reveal that the first principal component (PC1) accounts for 95% of the variance in yields, indicating that overall interest rate levels—largely driven by the Federal Funds Rate—are the primary determinant of yield fluctuations. The second component (PC2), which represents the slope of the yield curve, shows how short-term and long-term yields behave differently, capturing 4.6% of the variance. The third component (PC3) accounts for a negligible amount of variance and is likely influenced by idiosyncratic factors tied to specific maturities.
+            </p>
+            <p>This analysis confirms that Federal Reserve decisions play a crucial role in shaping U.S. Treasury yields, with macroeconomic conditions, inflation expectations, and interest rate policies being the most significant drivers. The high variance captured by PC1 emphasizes the importance of tracking rate cuts, hikes, and other monetary policy actions when analyzing yield movements. Investors should therefore monitor both short- and long-term trends in interest rates and yields to better position their portfolios for market changes, particularly in times of economic uncertainty, when yield curves might invert or steepen.
+            </p>
+            <p>
+            Lastly, the PCA's visualization of yield dynamics over time highlights how Federal Reserve interventions, such as the recent rate cut, can cause immediate and profound shifts across various asset classes. This analysis offers a roadmap for future studies on yield curve dynamics, helping investors and policymakers alike understand how critical rate decisions ripple through financial markets.
+        </p>
+        </div>
+        <div class="section">
+            <h2 id="sources and disclosures">Sources and Disclosures</h2>
+            <p>This is not financial advice, but rather a research report that examines treasury yields and the factors that affect them. The following sources were used to help formulate my thoughts, analyze yields, and structure my analysis:</p>
+            <ul>
+                <li><strong><a href="https://www.aptech.com/blog/applications-of-principal-components-analysis-in-finance/">Applications of Principal Components Analysis in Finance | Aptech</a></strong> — The PCA model I (Xander Balog) built was adapted from a GAUSS model created by Eric at Aptech, which I rebuilt in Python, utilizing up-to-date interest rates and treasury bill/note data. All commentary in this report was crafted by me, Xander Balog, with enhancements by ChatGPT. ChatGPT also assisted in the translation of GAUSS to Python.</li>
+                <li><strong><a href="https://finance.yahoo.com/quote/CVNA/">Carvana Co. (CVNA) Stock Price, News, Quote & History | Yahoo Finance</a></strong> — For Carvana Company stock prices.</li>
+                <li><strong><a href="https://finance.yahoo.com/quote/AFRM/">Affirm Holdings, Inc. (AFRM) Stock Price, News, Quote & History | Yahoo Finance</a></strong> — For Affirm Holdings stock prices.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
