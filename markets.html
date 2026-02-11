@@ -48,8 +48,9 @@
 
     <script>
         (function() {
+            var RAW_JSON = 'https://raw.githubusercontent.com/alphahawk-dev6/alphahawk-dev6.github.io/main/data/dashboard_data.json';
             var basePath = window.location.pathname.replace(/\/[^/]*$/, '') || '';
-            var absoluteUrl = window.location.origin + basePath + '/data/dashboard_data.json';
+            var sameOriginUrl = window.location.origin + basePath + '/data/dashboard_data.json';
             function fetchJson(url) {
                 return fetch(url).then(function(r) {
                     if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -57,6 +58,7 @@
                 });
             }
             function render(data) {
+                if (!data || !data.summary) return;
                 const s = data.summary || {};
                 const el = document.getElementById('summary');
                 el.innerHTML = '<div class="metrics">' +
@@ -114,11 +116,12 @@
             function showError(msg) {
                 document.getElementById('summary').innerHTML = '<p style="color:#666;">' + msg + '</p>';
             }
-            fetchJson(absoluteUrl)
+            fetchJson(RAW_JSON)
                 .then(render)
+                .catch(function() { return fetchJson(sameOriginUrl).then(render); })
                 .catch(function() { return fetchJson('data/dashboard_data.json').then(render); })
                 .catch(function() {
-                    showError('Dashboard data not found. If this site is on GitHub Pages, ensure <code>data/dashboard_data.json</code> is in the repo. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project, copy <code>site/data/dashboard_data.json</code> into this repo’s <code>data/</code> folder, and push.');
+                    showError('Dashboard data not found. Ensure <code>data/dashboard_data.json</code> is in the repo and push. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project, then copy <code>site/data/dashboard_data.json</code> into this repo’s <code>data/</code> folder.');
                 });
         })();
     </script>
