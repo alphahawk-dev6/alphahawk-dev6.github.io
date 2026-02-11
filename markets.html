@@ -31,6 +31,24 @@
         .chart-filters { margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
         .chart-filters label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.88rem; }
         .chart-filters input { cursor: pointer; }
+        .chart-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+        .chart-tab { padding: 10px 18px; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 6px; font-size: 0.95rem; }
+        .chart-tab:hover { background: #eee; }
+        .chart-tab.active { background: #007bff; color: #fff; border-color: #007bff; }
+        .chart-panel { display: none; }
+        .chart-panel.active { display: block; }
+        .expander { border: 1px solid #dee2e6; border-radius: 8px; margin: 24px 0; overflow: hidden; }
+        .expander summary { padding: 12px 16px; background: #f8f9fa; cursor: pointer; font-weight: 600; font-size: 1rem; }
+        .expander summary:hover { background: #eee; }
+        .expander .expander-body { padding: 16px; background: #fff; }
+        .expander .expander-body p { margin: 0 0 8px; font-size: 0.95rem; }
+        .expander .expander-body ul { margin: 0 0 12px; padding-left: 20px; }
+        .expander .expander-body li { margin-bottom: 6px; }
+        .glossary-item { margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #eee; }
+        .glossary-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .glossary-item strong { display: block; margin-bottom: 4px; }
+        .glossary-item .definition { color: #555; font-size: 0.9rem; margin-bottom: 4px; }
+        .glossary-item .why { font-size: 0.88rem; color: #666; font-style: italic; }
     </style>
 </head>
 <body class="dashboard-body">
@@ -60,7 +78,10 @@
         <div id="takeaway" class="takeaway" style="display:none;"></div>
         <div id="report-date" class="report-date" style="display:none;"></div>
         <div class="section-title" id="charts-title">Charts</div>
+        <div id="chart-tabs" class="chart-tabs" style="display:none;"></div>
         <div id="charts"></div>
+        <div id="trends-expander" class="expander" style="display:none;"></div>
+        <div id="glossary-expander" class="expander" style="display:none;"></div>
     </div>
     <script src="https://raw.githubusercontent.com/alphahawk-dev6/alphahawk-dev6.github.io/main/data/dashboard_data.js"></script>
     <script>
@@ -150,7 +171,27 @@
                 document.getElementById('charts-title').textContent = 'Charts' + (compareLabel ? ' — ' + primaryLabel + ' vs ' + compareLabel : ' — ' + primaryLabel);
 
                 var chartsEl = document.getElementById('charts');
+                var tabsEl = document.getElementById('chart-tabs');
                 chartsEl.innerHTML = '';
+                tabsEl.innerHTML = '';
+                var panels = [];
+                function showTab(idx) {
+                    panels.forEach(function(p, i) { p.classList.toggle('active', i === idx); });
+                    tabsEl.querySelectorAll('.chart-tab').forEach(function(t, i) { t.classList.toggle('active', i === idx); });
+                }
+                function addChartTab(label, panelEl) {
+                    var idx = panels.length;
+                    panelEl.classList.add('chart-panel');
+                    if (idx === 0) panelEl.classList.add('active');
+                    panels.push(panelEl);
+                    chartsEl.appendChild(panelEl);
+                    var tabBtn = document.createElement('button');
+                    tabBtn.className = 'chart-tab' + (idx === 0 ? ' active' : '');
+                    tabBtn.textContent = label;
+                    tabBtn.onclick = function() { showTab(idx); };
+                    tabsEl.appendChild(tabBtn);
+                    tabsEl.style.display = 'flex';
+                }
                 if (storage.length) {
                     var dates = storage.map(function(d) { return d.date; });
                     var actual = storage.map(function(d) { return d.value_bcf; });
@@ -169,67 +210,89 @@
                         visible.push(true, true);
                     }
                     var layout1 = Object.assign({}, layoutBase, { title: 'Gas in storage over time', xaxis: { title: 'Date' }, yaxis: { title: 'Gas in storage (Bcf)' }, height: CHART_H });
-                    var div1 = document.createElement('div');
-                    div1.className = 'chart-section';
-                    div1.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Blue/orange = primary region; purple/teal = compare. Toggle lines below.</p>' +
+                    var panel1 = document.createElement('div');
+                    panel1.innerHTML = '<div class="chart-section"><p class="chart-caption"><strong>What to look for:</strong> Blue/orange = primary; purple/teal = compare. Toggle below.</p>' +
                         '<div class="chart-filters"><label><input type="checkbox" id="f1-0" checked> Primary Actual</label><label><input type="checkbox" id="f1-1" checked> Primary 5-yr</label>' +
-                        (compareStorage.length ? '<label><input type="checkbox" id="f1-2" checked> Compare Actual</label><label><input type="checkbox" id="f1-3" checked> Compare 5-yr</label>' : '') + '</div>';
-                    var wrap1 = document.createElement('div');
-                    wrap1.className = 'chart-wrap';
-                    div1.appendChild(wrap1);
-                    chartsEl.appendChild(div1);
+                        (compareStorage.length ? '<label><input type="checkbox" id="f1-2" checked> Compare Actual</label><label><input type="checkbox" id="f1-3" checked> Compare 5-yr</label>' : '') + '</div><div class="chart-wrap" id="wrap1"></div></div>';
+                    var wrap1 = panel1.querySelector('#wrap1');
                     var tracesFiltered = traces.filter(function(t) { return t.y && t.y.some(function(v) { return v != null; }); });
                     Plotly.newPlot(wrap1, tracesFiltered, layout1, { responsive: true });
                     for (var i = 0; i < traces.length; i++) {
-                        var cb = document.getElementById('f1-' + i);
+                        var cb = panel1.querySelector('#f1-' + i);
                         if (cb) cb.onchange = function() {
                             var v = [];
                             for (var j = 0; j < traces.length; j++) {
-                                var c = document.getElementById('f1-' + j);
+                                var c = panel1.querySelector('#f1-' + j);
                                 v.push(c ? c.checked : true);
                             }
                             Plotly.restyle(wrap1, { visible: v });
                         };
                     }
+                    addChartTab('Storage over time', panel1);
                 }
                 var netChange = storage.map(function(d) { return d.net_change_bcf; });
                 var datesStorage = storage.map(function(d) { return d.date; });
+                var compareNetChange = compareStorage.length ? compareStorage.map(function(d) { return d.net_change_bcf; }) : [];
+                var compareDatesStorage = compareStorage.length ? compareStorage.map(function(d) { return d.date; }) : [];
                 if (datesStorage.length && netChange.some(function(v) { return v != null; })) {
                     var colors = netChange.map(function(v) { return v >= 0 ? '#2ca02c' : '#d62728'; });
-                    var div2 = document.createElement('div');
-                    div2.className = 'chart-section';
-                    div2.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Green = injection; red = withdrawal.</p>';
-                    var wrap2 = document.createElement('div');
-                    wrap2.className = 'chart-wrap';
-                    div2.appendChild(wrap2);
-                    chartsEl.appendChild(div2);
-                    var layout2 = Object.assign({}, layoutBase, { title: 'Weekly injection vs withdrawal', xaxis: { title: 'Date' }, yaxis: { title: 'Bcf' }, height: CHART_H, showlegend: false });
-                    Plotly.newPlot(wrap2, [{ x: datesStorage, y: netChange, type: 'bar', marker: { color: colors }, name: 'Weekly change' }], layout2, { responsive: true });
+                    var flowTraces = [{ x: datesStorage, y: netChange, type: 'bar', marker: { color: colors }, name: primaryLabel }];
+                    if (compareDatesStorage.length && compareNetChange.some(function(v) { return v != null; })) {
+                        flowTraces.push({ x: compareDatesStorage, y: compareNetChange, type: 'scatter', mode: 'lines', name: compareLabel, line: { color: '#9467bd', width: 2 } });
+                    }
+                    var layout2 = Object.assign({}, layoutBase, { title: 'Weekly injection vs withdrawal', xaxis: { title: 'Date' }, yaxis: { title: 'Bcf' }, height: CHART_H });
+                    var panel2 = document.createElement('div');
+                    panel2.innerHTML = '<div class="chart-section"><p class="chart-caption"><strong>What to look for:</strong> Bars = primary region; line = compare. Green = injection, red = withdrawal.</p><div class="chart-wrap" id="wrap2"></div></div>';
+                    Plotly.newPlot(panel2.querySelector('#wrap2'), flowTraces, layout2, { responsive: true });
+                    addChartTab('Weekly build vs draw', panel2);
                 }
                 var corr = correlationByRegion[regionValue] || [];
-                if (corr.length) {
-                    var div3 = document.createElement('div');
-                    div3.className = 'chart-section';
-                    div3.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Each point = one week. More gas than usual (right) often lines up with lower prices (down).</p>';
-                    var wrap3 = document.createElement('div');
-                    wrap3.className = 'chart-wrap';
-                    div3.appendChild(wrap3);
-                    chartsEl.appendChild(div3);
-                    var layout3 = Object.assign({}, layoutBase, { title: 'Price vs storage surprise (vs 5-yr)', xaxis: { title: 'Storage surprise (Bcf)' }, yaxis: { title: '$/MMBtu' }, height: CHART_H });
-                    Plotly.newPlot(wrap3, [{ x: corr.map(function(d) { return d.surprise_bcf; }), y: corr.map(function(d) { return d.price; }), type: 'scatter', mode: 'markers', name: 'Price vs surprise', marker: { size: 6, color: '#9467bd', opacity: 0.7 } }], layout3, { responsive: true });
+                var compareCorr = (compareValue && correlationByRegion[compareValue]) ? correlationByRegion[compareValue] : [];
+                if (corr.length || compareCorr.length) {
+                    var corrTraces = [];
+                    if (corr.length) {
+                        corrTraces.push({ x: corr.map(function(d) { return d.surprise_bcf; }), y: corr.map(function(d) { return d.price; }), type: 'scatter', mode: 'markers', name: primaryLabel, marker: { size: 6, color: '#9467bd', opacity: 0.7 } });
+                    }
+                    if (compareCorr.length) {
+                        corrTraces.push({ x: compareCorr.map(function(d) { return d.surprise_bcf; }), y: compareCorr.map(function(d) { return d.price; }), type: 'scatter', mode: 'markers', name: compareLabel, marker: { size: 6, color: '#17becf', opacity: 0.7 } });
+                    }
+                    if (corrTraces.length) {
+                        var layout3 = Object.assign({}, layoutBase, { title: 'Price vs storage surprise (vs 5-yr)', xaxis: { title: 'Storage surprise (Bcf)' }, yaxis: { title: '$/MMBtu' }, height: CHART_H });
+                        var panel3 = document.createElement('div');
+                        panel3.innerHTML = '<div class="chart-section"><p class="chart-caption"><strong>What to look for:</strong> Each point = one week. More gas than usual (right) often lines up with lower prices (down).</p><div class="chart-wrap" id="wrap3"></div></div>';
+                        Plotly.newPlot(panel3.querySelector('#wrap3'), corrTraces, layout3, { responsive: true });
+                        addChartTab('Price vs storage', panel3);
+                    }
                 }
                 var prices = data.prices || [];
                 if (prices.length) {
-                    var div4 = document.createElement('div');
-                    div4.className = 'chart-section';
-                    div4.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Henry Hub benchmark price over time.</p>';
-                    var wrap4 = document.createElement('div');
-                    wrap4.className = 'chart-wrap';
-                    div4.appendChild(wrap4);
-                    chartsEl.appendChild(div4);
                     var layout4 = Object.assign({}, layoutBase, { title: 'Henry Hub price', xaxis: { title: 'Date' }, yaxis: { title: '$/MMBtu' }, height: CHART_H });
-                    Plotly.newPlot(wrap4, [{ x: prices.map(function(d) { return d.date; }), y: prices.map(function(d) { return d.price; }), type: 'scatter', mode: 'lines', name: 'Henry Hub', line: { color: '#17becf' } }], layout4, { responsive: true });
+                    var panel4 = document.createElement('div');
+                    panel4.innerHTML = '<div class="chart-section"><p class="chart-caption"><strong>What to look for:</strong> Henry Hub benchmark price over time.</p><div class="chart-wrap" id="wrap4"></div></div>';
+                    Plotly.newPlot(panel4.querySelector('#wrap4'), [{ x: prices.map(function(d) { return d.date; }), y: prices.map(function(d) { return d.price; }), type: 'scatter', mode: 'lines', name: 'Henry Hub', line: { color: '#17becf' } }], layout4, { responsive: true });
+                    addChartTab('Henry Hub price', panel4);
                 }
+
+                var trends = data.trends || [];
+                var trendsEl = document.getElementById('trends-expander');
+                if (trends.length) {
+                    trendsEl.style.display = 'block';
+                    function boldHtml(s) { return (s || '').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>'); }
+                    trendsEl.innerHTML = '<details><summary>This week\'s details &amp; what the trends say</summary><div class="expander-body"><p><strong>Trends</strong></p><ul>' +
+                        trends.map(function(t) { return '<li>' + boldHtml(t) + '</li>'; }).join('') + '</ul></div></details>';
+                } else { trendsEl.style.display = 'none'; }
+
+                var glossary = data.glossary || [];
+                var glossaryEl = document.getElementById('glossary-expander');
+                if (glossary.length) {
+                    glossaryEl.style.display = 'block';
+                    glossaryEl.innerHTML = '<details><summary>Glossary: what each term means</summary><div class="expander-body">' +
+                        glossary.map(function(g) {
+                            return '<div class="glossary-item"><strong>' + (g.name || '').replace(/</g, '&lt;') + '</strong>' +
+                                '<p class="definition">' + (g.definition || '').replace(/</g, '&lt;') + '</p>' +
+                                '<p class="why"><em>Why it matters:</em> ' + (g.why_it_matters || '').replace(/</g, '&lt;') + '</p></div>';
+                        }).join('') + '</div></details>';
+                } else { glossaryEl.style.display = 'none'; }
             }
             function showError(msg) {
                 document.getElementById('summary').innerHTML = '<p style="color:#666;">' + msg + '</p>';

@@ -42666,5 +42666,58 @@
 "surprise_bcf": 69.80000000000018,
 "price": 13.8
 }
+],
+"glossary": [
+{
+"name": "Working gas storage (Bcf)",
+"definition": "Volume of natural gas held in underground storage (salt caverns, depleted reservoirs, aquifers) that is available for withdrawal. Reported weekly by EIA for the Lower 48 and by region.",
+"why_it_matters": "Storage is the main buffer between supply/demand and price. High storage going into winter reduces price spikes; low storage increases scarcity risk."
+},
+{
+"name": "5-year average (5-yr avg)",
+"definition": "For each report week, the average storage level in that same calendar week over the previous five years. EIA\u2019s standard benchmark for 'normal' inventory.",
+"why_it_matters": "Markets compare current storage to this benchmark. Above 5-yr = more cushion (often bearish for price); below 5-yr = tighter balance (often bullish)."
+},
+{
+"name": "Weekly injection / withdrawal (implied flow)",
+"definition": "Net change in storage from the prior week. Positive = injection (supply exceeded demand); negative = withdrawal (demand exceeded supply).",
+"why_it_matters": "Shows whether the system is building or drawing inventory. Unusually large injections can pressure prices down; larger-than-expected withdrawals can support or lift prices."
+},
+{
+"name": "Storage surprise (vs 5-yr avg)",
+"definition": "Current storage minus the 5-year average for that week, in Bcf or percent. Positive = more gas in the ground than 'normal'; negative = less.",
+"why_it_matters": "Direct measure of how tight or loose the market is versus expectations. Surprises often move prompt prices on report day."
+},
+{
+"name": "Henry Hub price ($/MMBtu)",
+"definition": "Spot price at Henry Hub (Louisiana), the main U.S. natural gas trading hub. Reported in dollars per million British thermal units.",
+"why_it_matters": "The reference price for U.S. gas and many contracts. Correlates with storage (loose storage \u2192 lower price; tight \u2192 higher) and drives storage arbitrage value."
+},
+{
+"name": "Price vs storage surprise",
+"definition": "Scatter of Henry Hub price (y) vs storage surprise in Bcf (x) on report weeks. Shows whether higher/lower inventory than 5-yr tends to align with lower/higher prices.",
+"why_it_matters": "Negative relationship is typical: more storage than 5-yr often coincides with lower prices. Helps interpret whether current price is 'justified' by storage."
+},
+{
+"name": "Seasonal storage pattern (by week of year)",
+"definition": "Average storage level by calendar week across years. Typically peaks in late fall (pre-winter) and troughs in late winter/early spring (post-heating).",
+"why_it_matters": "Shows the normal build (injection season) and draw (withdrawal season). Deviations from this pattern signal an early or late refill, or an unusually heavy draw."
+},
+{
+"name": "Heating / cooling degree days (HDD / CDD)",
+"definition": "HDD = demand proxy for heating (cold weather); CDD = demand proxy for cooling (hot weather). Higher HDD/CDD usually mean more gas demand (heating or power for AC).",
+"why_it_matters": "Weather drives short-term demand. Unexpected HDD/CDD can explain big injections/withdrawals and price moves."
+},
+{
+"name": "Regional breakdown (East, Midwest, Mountain, Pacific, South Central)",
+"definition": "Storage reported by EIA region. South Central (including salt and nonsalt) is the largest; regional imbalances affect basis and flows.",
+"why_it_matters": "Regional shortages or surpluses affect local prices and pipeline flows. Total L48 can mask regional tightness."
+}
+],
+"trends": [
+"**Storage vs 5-yr**: Current 2463 Bcf vs 5-yr avg 2393 Bcf \u2192 **+70 Bcf (+2.9%)**. Above normal suggests more supply cushion; typically bearish for prompt price unless demand or exports are strong.",
+"**Recent flow (4-wk avg)**: -241 Bcf/week. Faster-than-normal draw can support price.",
+"**Henry Hub**: Latest $5.01/MMBtu; 4-week change **+67.0%**. Rising price can reflect tightening fundamentals or weather.",
+"**Seasonal context**: Injection season (roughly Apr\u2013Oct). Focus on refill pace vs 5-yr; slow refill can support winter strip prices."
 ]
 }
