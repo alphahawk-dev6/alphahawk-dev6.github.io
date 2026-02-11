@@ -47,7 +47,7 @@
     </div>
 
     <script>
-        fetch('data/dashboard_data.json')
+        fetch((window.location.pathname.replace(/\/[^/]*$/, '') || '') + '/data/dashboard_data.json')
             .then(r => r.json())
             .then(data => {
                 const s = data.summary || {};
