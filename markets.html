@@ -7,29 +7,34 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
-        .dashboard-page { width: 100%; max-width: none; padding: 20px 24px 40px; box-sizing: border-box; }
-        .dashboard-page h1 { margin-bottom: 0.25rem; }
-        .dashboard-page .subtitle { color: #666; margin-bottom: 1rem; }
-        .info-box { background: #e8f4fd; border: 1px solid #007bff; border-radius: 8px; padding: 12px 16px; margin-bottom: 1.25rem; font-size: 0.95rem; }
-        .metrics { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin: 20px 0; }
+        body.dashboard-body { padding-top: 0; }
+        nav.dashboard-nav { margin-bottom: 0; border-radius: 0; }
+        .dashboard-page { width: 100%; max-width: none; padding: 24px 28px 48px; box-sizing: border-box; }
+        .dashboard-page h1 { margin: 0 0 4px; font-size: 1.75rem; }
+        .dashboard-page .subtitle { color: #666; margin: 0 0 16px; font-size: 0.95rem; }
+        .info-box { background: #e8f4fd; border: 1px solid #007bff; border-radius: 8px; padding: 12px 16px; margin: 0 0 20px; font-size: 0.95rem; }
+        .filter-row { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; margin-bottom: 16px; }
+        .filter-row label { font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+        .filter-row select { padding: 6px 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.9rem; min-width: 180px; }
+        .metrics { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 16px 0 20px; }
         @media (max-width: 900px) { .metrics { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); } }
-        .metric { background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center; }
-        .metric .value { font-size: 1.5rem; font-weight: 600; }
-        .metric .label { font-size: 0.8rem; color: #666; }
-        .takeaway { background: #f0f8f0; border: 1px solid #2ca02c; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
-        .report-date { font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
-        .chart-section { margin-bottom: 2rem; }
-        .chart-wrap { background: #fff; border-radius: 8px; padding: 16px; margin-bottom: 0.5rem; border: 1px solid #ddd; width: 100%; box-sizing: border-box; }
+        .metric { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 14px; text-align: center; }
+        .metric .value { font-size: 1.4rem; font-weight: 600; }
+        .metric .label { font-size: 0.78rem; color: #666; margin-top: 2px; }
+        .takeaway { background: #f0f8f0; border: 1px solid #2ca02c; border-radius: 8px; padding: 12px 16px; margin: 0 0 12px; font-size: 0.95rem; }
+        .report-date { font-size: 0.85rem; color: #666; margin-bottom: 20px; }
+        .section-title { font-size: 1.05rem; font-weight: 600; margin: 24px 0 12px; padding-bottom: 4px; }
+        .chart-section { margin-bottom: 24px; }
+        .chart-wrap { background: #fff; border-radius: 8px; padding: 16px; margin-top: 8px; border: 1px solid #e0e0e0; width: 100%; box-sizing: border-box; }
         .chart-wrap .js-plotly-plot { width: 100% !important; }
-        .chart-caption { font-size: 0.9rem; color: #555; margin-bottom: 8px; }
+        .chart-caption { font-size: 0.88rem; color: #555; margin: 0 0 10px; }
         .chart-filters { margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-        .chart-filters label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.9rem; }
+        .chart-filters label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.88rem; }
         .chart-filters input { cursor: pointer; }
-        .section-title { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; font-weight: 600; }
     </style>
 </head>
-<body>
-    <nav>
+<body class="dashboard-body">
+    <nav class="dashboard-nav">
         <div class="logo">Xander's Portfolio</div>
         <div class="nav-items">
             <a href="index.html">Home</a>
@@ -38,15 +43,6 @@
             <a href="contact.html">Contact</a>
             <a href="markets.html">Natural Gas</a>
             <a href="apa-stock-pitch.html">APA Stock Pitch</a>
-            <div class="dropdown">
-                <button class="dropbtn">Dashboards</button>
-                <div class="dropdown-content">
-                    <a href="markets.html">Natural Gas</a>
-                    <a href="#" onclick="loadDashboard('globalMarkets')">Global Markets/Indices</a>
-                    <a href="#" onclick="loadDashboard('forex')">Forex Dashboard</a>
-                    <a href="#" onclick="loadDashboard('crypto')">Crypto Dashboard</a>
-                </div>
-            </div>
         </div>
     </nav>
 
@@ -56,10 +52,14 @@
         <div class="info-box">
             <strong>How to read this:</strong> The numbers at the top tell you if we have <em>more</em> or <em>less</em> gas in storage than usual. More than usual → often lower prices. Less than usual → higher price risk. The charts below show the same story over time.
         </div>
+        <div id="filter-row" class="filter-row" style="display:none;">
+            <label>Region <select id="region-select"></select></label>
+            <label>Compare to <select id="compare-select"></select></label>
+        </div>
         <div id="summary"></div>
         <div id="takeaway" class="takeaway" style="display:none;"></div>
         <div id="report-date" class="report-date" style="display:none;"></div>
-        <div class="section-title">Charts — Lower 48</div>
+        <div class="section-title" id="charts-title">Charts</div>
         <div id="charts"></div>
     </div>
     <script src="https://raw.githubusercontent.com/alphahawk-dev6/alphahawk-dev6.github.io/main/data/dashboard_data.js"></script>
@@ -70,15 +70,60 @@
             var sameOriginUrl = window.location.origin + basePath + '/data/dashboard_data.json';
             var CHART_H = 520;
             var layoutBase = { template: 'plotly_white', autosize: true, hovermode: 'x unified', legend: { orientation: 'h', yanchor: 'bottom', y: 1.02, xanchor: 'center', x: 0.5 }, margin: { t: 48, b: 48, l: 56, r: 24 } };
+            var currentData = null;
             function fetchJson(url) {
                 return fetch(url).then(function(r) {
                     if (!r.ok) throw new Error('HTTP ' + r.status);
                     return r.json();
                 });
             }
-            function render(data) {
-                if (!data || !data.summary) return;
-                var s = data.summary || {};
+            function regionLabel(data, value) {
+                if (!data.regions) return value || 'Lower 48';
+                var r = data.regions.find(function(x) { return x.value === value; });
+                return r ? r.label : value || 'Lower 48';
+            }
+            function render(data, regionValue, compareValue) {
+                if (!data) return;
+                var regions = data.regions || [{ label: 'Lower 48', value: 'total lower 48 states' }];
+                var storageByRegion = data.storage_by_region || {};
+                var summaryByRegion = data.summary_by_region || {};
+                var correlationByRegion = data.correlation_by_region || {};
+                regionValue = regionValue || (regions[0] && regions[0].value) || 'total lower 48 states';
+                if (!storageByRegion[regionValue] && data.storage_l48) {
+                    storageByRegion[regionValue] = data.storage_l48;
+                    summaryByRegion[regionValue] = data.summary || {};
+                    correlationByRegion[regionValue] = data.correlation || [];
+                }
+                var s = summaryByRegion[regionValue] || {};
+                var storage = storageByRegion[regionValue] || [];
+                var compareStorage = (compareValue && compareValue !== regionValue) ? (storageByRegion[compareValue] || []) : [];
+                var primaryLabel = regionLabel(data, regionValue);
+                var compareLabel = compareValue ? regionLabel(data, compareValue) : '';
+
+                document.getElementById('filter-row').style.display = 'block';
+                var regionSelect = document.getElementById('region-select');
+                var compareSelect = document.getElementById('compare-select');
+                if (regionSelect.options.length === 0) {
+                    regions.forEach(function(r) {
+                        regionSelect.appendChild(new Option(r.label, r.value));
+                    });
+                    compareSelect.appendChild(new Option('—', ''));
+                    regions.forEach(function(r) {
+                        compareSelect.appendChild(new Option(r.label, r.value));
+                    });
+                    regionSelect.value = regionValue;
+                    compareSelect.value = compareValue || '';
+                    regionSelect.onchange = function() {
+                        var cv = compareSelect.value;
+                        if (cv === regionSelect.value) compareSelect.value = '';
+                        render(currentData, regionSelect.value, compareSelect.value || null);
+                    };
+                    compareSelect.onchange = function() { render(currentData, regionSelect.value, compareSelect.value || null); };
+                } else {
+                    regionSelect.value = regionValue;
+                    compareSelect.value = compareValue || '';
+                }
+
                 var el = document.getElementById('summary');
                 el.innerHTML = '<div class="metrics">' +
                     (s.storage_bcf != null ? '<div class="metric"><span class="value">' + Number(s.storage_bcf).toLocaleString() + '</span><span class="label">Gas in storage (Bcf)</span></div>' : '') +
@@ -87,13 +132,13 @@
                     (s.net_change_bcf != null ? '<div class="metric"><span class="value">' + (s.net_change_bcf >= 0 ? '+' : '') + s.net_change_bcf + '</span><span class="label">Last week’s change (Bcf)</span></div>' : '') +
                     (s.price != null ? '<div class="metric"><span class="value">$' + s.price + '</span><span class="label">Henry Hub ($/MMBtu)</span></div>' : '') +
                     '</div>';
+                var t = document.getElementById('takeaway');
                 if (s.takeaway) {
-                    var t = document.getElementById('takeaway');
                     t.textContent = 'In short: ' + s.takeaway;
                     t.style.display = 'block';
-                }
+                } else { t.style.display = 'none'; }
+                var rd = document.getElementById('report-date');
                 if (s.report_date) {
-                    var rd = document.getElementById('report-date');
                     try {
                         var d = new Date(s.report_date);
                         rd.textContent = 'Latest storage report: ' + d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -101,27 +146,51 @@
                         rd.textContent = 'Latest storage report: ' + s.report_date;
                     }
                     rd.style.display = 'block';
-                }
-                var storage = data.storage_l48 || [];
+                } else { rd.style.display = 'none'; }
+                document.getElementById('charts-title').textContent = 'Charts' + (compareLabel ? ' — ' + primaryLabel + ' vs ' + compareLabel : ' — ' + primaryLabel);
+
+                var chartsEl = document.getElementById('charts');
+                chartsEl.innerHTML = '';
                 if (storage.length) {
                     var dates = storage.map(function(d) { return d.date; });
                     var actual = storage.map(function(d) { return d.value_bcf; });
                     var avg5 = storage.map(function(d) { return d.five_yr_avg_bcf; });
-                    var layout1 = Object.assign({}, layoutBase, { title: 'Gas in storage over time — Lower 48', xaxis: { title: 'Date' }, yaxis: { title: 'Gas in storage (Bcf)' }, height: CHART_H });
-                    var trace1 = { x: dates, y: actual, name: 'Actual', type: 'scatter', mode: 'lines', line: { color: '#1f77b4' }, visible: true };
-                    var trace2 = { x: dates, y: avg5, name: 'Usual (5-yr)', type: 'scatter', mode: 'lines', line: { color: '#ff7f0e', dash: 'dash' }, visible: true };
+                    var traces = [
+                        { x: dates, y: actual, name: primaryLabel + ' — Actual', type: 'scatter', mode: 'lines', line: { color: '#1f77b4' }, visible: true },
+                        { x: dates, y: avg5, name: primaryLabel + ' — Usual (5-yr)', type: 'scatter', mode: 'lines', line: { color: '#ff7f0e', dash: 'dash' }, visible: true }
+                    ];
+                    var visible = [true, true];
+                    if (compareStorage.length) {
+                        var cd = compareStorage.map(function(d) { return d.date; });
+                        var ca = compareStorage.map(function(d) { return d.value_bcf; });
+                        var c5 = compareStorage.map(function(d) { return d.five_yr_avg_bcf; });
+                        traces.push({ x: cd, y: ca, name: compareLabel + ' — Actual', type: 'scatter', mode: 'lines', line: { color: '#9467bd' }, visible: true });
+                        traces.push({ x: cd, y: c5, name: compareLabel + ' — Usual (5-yr)', type: 'scatter', mode: 'lines', line: { color: '#17becf', dash: 'dash' }, visible: true });
+                        visible.push(true, true);
+                    }
+                    var layout1 = Object.assign({}, layoutBase, { title: 'Gas in storage over time', xaxis: { title: 'Date' }, yaxis: { title: 'Gas in storage (Bcf)' }, height: CHART_H });
                     var div1 = document.createElement('div');
                     div1.className = 'chart-section';
-                    div1.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Blue = actual storage; orange dashed = 5-yr average. Toggle lines below.</p>' +
-                        '<div class="chart-filters"><label><input type="checkbox" id="f1-actual" checked> Actual</label><label><input type="checkbox" id="f1-5yr" checked> 5-yr avg</label></div>';
+                    div1.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Blue/orange = primary region; purple/teal = compare. Toggle lines below.</p>' +
+                        '<div class="chart-filters"><label><input type="checkbox" id="f1-0" checked> Primary Actual</label><label><input type="checkbox" id="f1-1" checked> Primary 5-yr</label>' +
+                        (compareStorage.length ? '<label><input type="checkbox" id="f1-2" checked> Compare Actual</label><label><input type="checkbox" id="f1-3" checked> Compare 5-yr</label>' : '') + '</div>';
                     var wrap1 = document.createElement('div');
                     wrap1.className = 'chart-wrap';
-                    wrap1.id = 'chart-storage';
                     div1.appendChild(wrap1);
-                    document.getElementById('charts').appendChild(div1);
-                    Plotly.newPlot(wrap1, [trace1, trace2].filter(function(t) { return t.y.some(function(v) { return v != null; }); }), layout1, { responsive: true });
-                    document.getElementById('f1-actual').onchange = function() { Plotly.restyle(wrap1, { visible: [this.checked, document.getElementById('f1-5yr').checked] }); };
-                    document.getElementById('f1-5yr').onchange = function() { Plotly.restyle(wrap1, { visible: [document.getElementById('f1-actual').checked, this.checked] }); };
+                    chartsEl.appendChild(div1);
+                    var tracesFiltered = traces.filter(function(t) { return t.y && t.y.some(function(v) { return v != null; }); });
+                    Plotly.newPlot(wrap1, tracesFiltered, layout1, { responsive: true });
+                    for (var i = 0; i < traces.length; i++) {
+                        var cb = document.getElementById('f1-' + i);
+                        if (cb) cb.onchange = function() {
+                            var v = [];
+                            for (var j = 0; j < traces.length; j++) {
+                                var c = document.getElementById('f1-' + j);
+                                v.push(c ? c.checked : true);
+                            }
+                            Plotly.restyle(wrap1, { visible: v });
+                        };
+                    }
                 }
                 var netChange = storage.map(function(d) { return d.net_change_bcf; });
                 var datesStorage = storage.map(function(d) { return d.date; });
@@ -129,25 +198,23 @@
                     var colors = netChange.map(function(v) { return v >= 0 ? '#2ca02c' : '#d62728'; });
                     var div2 = document.createElement('div');
                     div2.className = 'chart-section';
-                    div2.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Green = injection (we added gas); red = withdrawal (we drew gas).</p>';
+                    div2.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Green = injection; red = withdrawal.</p>';
                     var wrap2 = document.createElement('div');
                     wrap2.className = 'chart-wrap';
-                    wrap2.id = 'chart-flow';
                     div2.appendChild(wrap2);
-                    document.getElementById('charts').appendChild(div2);
-                    var layout2 = Object.assign({}, layoutBase, { title: 'Weekly injection vs withdrawal — Lower 48', xaxis: { title: 'Date' }, yaxis: { title: 'Bcf' }, height: CHART_H, showlegend: false });
+                    chartsEl.appendChild(div2);
+                    var layout2 = Object.assign({}, layoutBase, { title: 'Weekly injection vs withdrawal', xaxis: { title: 'Date' }, yaxis: { title: 'Bcf' }, height: CHART_H, showlegend: false });
                     Plotly.newPlot(wrap2, [{ x: datesStorage, y: netChange, type: 'bar', marker: { color: colors }, name: 'Weekly change' }], layout2, { responsive: true });
                 }
-                var corr = data.correlation || [];
+                var corr = correlationByRegion[regionValue] || [];
                 if (corr.length) {
                     var div3 = document.createElement('div');
                     div3.className = 'chart-section';
                     div3.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Each point = one week. More gas than usual (right) often lines up with lower prices (down).</p>';
                     var wrap3 = document.createElement('div');
                     wrap3.className = 'chart-wrap';
-                    wrap3.id = 'chart-corr';
                     div3.appendChild(wrap3);
-                    document.getElementById('charts').appendChild(div3);
+                    chartsEl.appendChild(div3);
                     var layout3 = Object.assign({}, layoutBase, { title: 'Price vs storage surprise (vs 5-yr)', xaxis: { title: 'Storage surprise (Bcf)' }, yaxis: { title: '$/MMBtu' }, height: CHART_H });
                     Plotly.newPlot(wrap3, [{ x: corr.map(function(d) { return d.surprise_bcf; }), y: corr.map(function(d) { return d.price; }), type: 'scatter', mode: 'markers', name: 'Price vs surprise', marker: { size: 6, color: '#9467bd', opacity: 0.7 } }], layout3, { responsive: true });
                 }
@@ -158,9 +225,8 @@
                     div4.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Henry Hub benchmark price over time.</p>';
                     var wrap4 = document.createElement('div');
                     wrap4.className = 'chart-wrap';
-                    wrap4.id = 'chart-price';
                     div4.appendChild(wrap4);
-                    document.getElementById('charts').appendChild(div4);
+                    chartsEl.appendChild(div4);
                     var layout4 = Object.assign({}, layoutBase, { title: 'Henry Hub price', xaxis: { title: 'Date' }, yaxis: { title: '$/MMBtu' }, height: CHART_H });
                     Plotly.newPlot(wrap4, [{ x: prices.map(function(d) { return d.date; }), y: prices.map(function(d) { return d.price; }), type: 'scatter', mode: 'lines', name: 'Henry Hub', line: { color: '#17becf' } }], layout4, { responsive: true });
                 }
@@ -168,12 +234,22 @@
             function showError(msg) {
                 document.getElementById('summary').innerHTML = '<p style="color:#666;">' + msg + '</p>';
             }
-            if (window.DASHBOARD_DATA && window.DASHBOARD_DATA.summary) {
-                render(window.DASHBOARD_DATA);
+            function init(data) {
+                currentData = data;
+                var hasNewShape = data.regions && data.storage_by_region && data.summary_by_region;
+                if (hasNewShape) {
+                    var r = data.regions[0];
+                    render(data, r && r.value, null);
+                } else {
+                    render(data, 'total lower 48 states', null);
+                }
+            }
+            if (window.DASHBOARD_DATA && (window.DASHBOARD_DATA.summary || window.DASHBOARD_DATA.summary_by_region)) {
+                init(window.DASHBOARD_DATA);
                 return;
             }
-            fetchJson(RAW_JSON).then(render).catch(function() { return fetchJson(sameOriginUrl).then(render); }).catch(function() { return fetchJson('data/dashboard_data.json').then(render); }).catch(function() {
-                showError('Dashboard data not found. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project, then copy <code>site/data/</code> (dashboard_data.json and dashboard_data.js) into this repo’s <code>data/</code> folder and push.');
+            fetchJson(RAW_JSON).then(init).catch(function() { return fetchJson(sameOriginUrl).then(init); }).catch(function() { return fetchJson('data/dashboard_data.json').then(init); }).catch(function() {
+                showError('Dashboard data not found. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project, then copy <code>site/data/</code> into this repo’s <code>data/</code> folder and push.');
             });
         })();
     </script>
