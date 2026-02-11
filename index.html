@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Xander's Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
             display: flex;
@@ -151,13 +151,26 @@
             <a href="about.html">About</a>
             <a href="project.html">Projects</a>
             <a href="contact.html">Contact</a>
+            <a href="markets.html">Natural Gas</a>
+            <a href="apa-stock-pitch.html">APA Stock Pitch</a>
+            <div class="dropdown">
+                <button class="dropbtn">Dashboards</button>
+                <div class="dropdown-content">
+                    <a href="markets.html">Natural Gas</a>
+                    <a href="#" onclick="loadDashboard('globalMarkets')">Global Markets/Indices</a>
+                    <a href="#" onclick="loadDashboard('forex')">Forex Dashboard</a>
+                    <a href="#" onclick="loadDashboard('crypto')">Crypto Dashboard</a>
+                </div>
+            </div>
         </div>
     </nav>
 
     <div class="main-content">
-        <h1>Welcome to My Portfolio</h1>
-        <p>Hi, I'm Xander Balog, a business analyst transitioning into the world of trading and portfolio management. Explore my projects, skills, and experience, and feel free to get in touch!</p>
-        <a href="project.html" class="cta-button">View My Projects</a>
+        <h1>Commodities & Markets</h1>
+        <p>Hi, I'm Xander Balog — business analyst and MSBA candidate focused on trading, portfolio management, and energy markets. Here you'll find natural gas storage and price analysis (EIA data), equity research, and project work.</p>
+        <a href="markets.html" class="cta-button">Natural Gas Dashboard</a>
+        <a href="apa-stock-pitch.html" class="cta-button" style="margin-left: 10px;">APA Stock Pitch</a>
+        <a href="project.html" class="cta-button" style="margin-left: 10px;">All Projects</a>
     </div>
 
     <div class="content-container">

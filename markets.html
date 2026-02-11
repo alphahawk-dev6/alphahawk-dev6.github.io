@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural Gas Markets - Xander's Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin: 20px 0; }
+        .metric { background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center; }
+        .metric .value { font-size: 1.5rem; font-weight: 600; }
+        .metric .label { font-size: 0.8rem; color: #666; }
+        .chart-wrap { background: #fff; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid #ddd; }
+        .takeaway { background: #e8f4fd; border: 1px solid #007bff; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }
+        .main-content { max-width: 960px; margin: 20px auto; padding: 20px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Xander's Portfolio</div>
+        <div class="nav-items">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="project.html">Projects</a>
+            <a href="contact.html">Contact</a>
+            <a href="markets.html">Natural Gas</a>
+            <a href="apa-stock-pitch.html">APA Stock Pitch</a>
+            <div class="dropdown">
+                <button class="dropbtn">Dashboards</button>
+                <div class="dropdown-content">
+                    <a href="markets.html">Natural Gas</a>
+                    <a href="#" onclick="loadDashboard('globalMarkets')">Global Markets/Indices</a>
+                    <a href="#" onclick="loadDashboard('forex')">Forex Dashboard</a>
+                    <a href="#" onclick="loadDashboard('crypto')">Crypto Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <h1>Natural Gas Market Dashboard</h1>
+        <p style="color:#666; margin-bottom: 1rem;">Lower 48 storage, 5-yr average, and Henry Hub. Data from EIA; snapshot updated when the site is rebuilt.</p>
+        <div id="summary"></div>
+        <div id="takeaway" class="takeaway" style="display:none;"></div>
+        <div id="charts"></div>
+    </div>
+
+    <script>
+        fetch('data/dashboard_data.json')
+            .then(r => r.json())
+            .then(data => {
+                const s = data.summary || {};
+                const el = document.getElementById('summary');
+                el.innerHTML = '<div class="metrics">' +
+                    (s.storage_bcf != null ? '<div class="metric"><span class="value">' + Number(s.storage_bcf).toLocaleString() + '</span><span class="label">Gas in storage (Bcf)</span></div>' : '') +
+                    (s.storage_5yr_bcf != null ? '<div class="metric"><span class="value">' + Number(s.storage_5yr_bcf).toLocaleString() + '</span><span class="label">5-yr avg (Bcf)</span></div>' : '') +
+                    (s.surprise_bcf != null ? '<div class="metric"><span class="value">' + (s.surprise_bcf >= 0 ? '+' : '') + s.surprise_bcf + '</span><span class="label">Vs usual (Bcf)</span></div>' : '') +
+                    (s.price != null ? '<div class="metric"><span class="value">$' + s.price + '</span><span class="label">Henry Hub ($/MMBtu)</span></div>' : '') +
+                    '</div>';
+                if (s.takeaway) {
+                    const t = document.getElementById('takeaway');
+                    t.textContent = s.takeaway;
+                    t.style.display = 'block';
+                }
+                const storage = data.storage_l48 || [];
+                if (storage.length) {
+                    const dates = storage.map(d => d.date);
+                    const actual = storage.map(d => d.value_bcf);
+                    const avg5 = storage.map(d => d.five_yr_avg_bcf);
+                    const layout1 = { title: 'Gas in storage over time', xaxis: { title: 'Date' }, yaxis: { title: 'Bcf' }, template: 'plotly_white', margin: { t: 40, b: 40 } };
+                    const trace1 = { x: dates, y: actual, name: 'Actual', type: 'scatter', mode: 'lines', line: { color: '#1f77b4' } };
+                    const trace2 = { x: dates, y: avg5, name: '5-yr avg', type: 'scatter', mode: 'lines', line: { color: '#ff7f0e', dash: 'dash' } };
+                    const div1 = document.createElement('div');
+                    div1.className = 'chart-wrap';
+                    div1.id = 'chart-storage';
+                    document.getElementById('charts').appendChild(div1);
+                    Plotly.newPlot(div1, [trace1, trace2].filter(t => t.y.some(v => v != null)), layout1, { responsive: true });
+                }
+                const netChange = (data.storage_l48 || []).map(d => d.net_change_bcf);
+                const datesStorage = (data.storage_l48 || []).map(d => d.date);
+                if (datesStorage.length && netChange.some(v => v != null)) {
+                    const colors = netChange.map(v => v >= 0 ? '#2ca02c' : '#d62728');
+                    const div2 = document.createElement('div');
+                    div2.className = 'chart-wrap';
+                    div2.id = 'chart-flow';
+                    document.getElementById('charts').appendChild(div2);
+                    Plotly.newPlot(div2, [{ x: datesStorage, y: netChange, type: 'bar', marker: { color: colors }, name: 'Weekly change' }], { title: 'Weekly injection (green) / withdrawal (red)', xaxis: { title: 'Date' }, yaxis: { title: 'Bcf' }, template: 'plotly_white', margin: { t: 40, b: 40 }, showlegend: false }, { responsive: true });
+                }
+                const corr = data.correlation || [];
+                if (corr.length) {
+                    const div3 = document.createElement('div');
+                    div3.className = 'chart-wrap';
+                    div3.id = 'chart-corr';
+                    document.getElementById('charts').appendChild(div3);
+                    Plotly.newPlot(div3, [{ x: corr.map(d => d.surprise_bcf), y: corr.map(d => d.price), type: 'scatter', mode: 'markers', name: 'Price vs storage surprise', marker: { size: 6, color: '#9467bd', opacity: 0.7 } }], { title: 'Price vs storage surprise (vs 5-yr)', xaxis: { title: 'Storage surprise (Bcf)' }, yaxis: { title: '$/MMBtu' }, template: 'plotly_white', margin: { t: 40, b: 40 } }, { responsive: true });
+                }
+                const prices = data.prices || [];
+                if (prices.length) {
+                    const div4 = document.createElement('div');
+                    div4.className = 'chart-wrap';
+                    div4.id = 'chart-price';
+                    document.getElementById('charts').appendChild(div4);
+                    Plotly.newPlot(div4, [{ x: prices.map(d => d.date), y: prices.map(d => d.price), type: 'scatter', mode: 'lines', name: 'Henry Hub', line: { color: '#17becf' } }], { title: 'Henry Hub price', xaxis: { title: 'Date' }, yaxis: { title: '$/MMBtu' }, template: 'plotly_white', margin: { t: 40, b: 40 } }, { responsive: true });
+                }
+            })
+            .catch(e => {
+                document.getElementById('summary').innerHTML = '<p style="color:#666;">Dashboard data not found. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project and copy <code>site/data/dashboard_data.json</code> into this repo’s <code>data/</code> folder.</p>';
+            });
+    </script>
+</body>
+</html>
