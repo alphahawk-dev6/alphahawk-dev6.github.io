@@ -47,9 +47,16 @@
     </div>
 
     <script>
-        fetch((window.location.pathname.replace(/\/[^/]*$/, '') || '') + '/data/dashboard_data.json')
-            .then(r => r.json())
-            .then(data => {
+        (function() {
+            var basePath = window.location.pathname.replace(/\/[^/]*$/, '') || '';
+            var absoluteUrl = window.location.origin + basePath + '/data/dashboard_data.json';
+            function fetchJson(url) {
+                return fetch(url).then(function(r) {
+                    if (!r.ok) throw new Error('HTTP ' + r.status);
+                    return r.json();
+                });
+            }
+            function render(data) {
                 const s = data.summary || {};
                 const el = document.getElementById('summary');
                 el.innerHTML = '<div class="metrics">' +
@@ -103,10 +110,17 @@
                     document.getElementById('charts').appendChild(div4);
                     Plotly.newPlot(div4, [{ x: prices.map(d => d.date), y: prices.map(d => d.price), type: 'scatter', mode: 'lines', name: 'Henry Hub', line: { color: '#17becf' } }], { title: 'Henry Hub price', xaxis: { title: 'Date' }, yaxis: { title: '$/MMBtu' }, template: 'plotly_white', margin: { t: 40, b: 40 } }, { responsive: true });
                 }
-            })
-            .catch(e => {
-                document.getElementById('summary').innerHTML = '<p style="color:#666;">Dashboard data not found. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project and copy <code>site/data/dashboard_data.json</code> into this repo’s <code>data/</code> folder.</p>';
-            });
+            }
+            function showError(msg) {
+                document.getElementById('summary').innerHTML = '<p style="color:#666;">' + msg + '</p>';
+            }
+            fetchJson(absoluteUrl)
+                .then(render)
+                .catch(function() { return fetchJson('data/dashboard_data.json').then(render); })
+                .catch(function() {
+                    showError('Dashboard data not found. If this site is on GitHub Pages, ensure <code>data/dashboard_data.json</code> is in the repo. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project, copy <code>site/data/dashboard_data.json</code> into this repo’s <code>data/</code> folder, and push.');
+                });
+        })();
     </script>
 </body>
 </html>
