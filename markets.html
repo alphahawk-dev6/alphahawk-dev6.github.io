@@ -48,6 +48,12 @@
     <script src="https://raw.githubusercontent.com/alphahawk-dev6/alphahawk-dev6.github.io/main/data/dashboard_data.js"></script>
     <script>
         (function() {
+            // #region agent log
+            var _log = function(msg, data, hyp) {
+                fetch('http://127.0.0.1:7243/ingest/0885db74-7893-4015-970b-29d54a69a249',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'markets.html',message:msg,data:data||{},hypothesisId:hyp||'',timestamp:Date.now(),runId:'debug1'})}).catch(function(){});
+            };
+            _log('IIFE start', { hasDASHBOARD_DATA: !!window.DASHBOARD_DATA, hasSummary: !!(window.DASHBOARD_DATA && window.DASHBOARD_DATA.summary), origin: window.location.origin, href: window.location.href }, 'H1-H3');
+            // #endregion
             var RAW_JSON = 'https://raw.githubusercontent.com/alphahawk-dev6/alphahawk-dev6.github.io/main/data/dashboard_data.json';
             var basePath = window.location.pathname.replace(/\/[^/]*$/, '') || '';
             var sameOriginUrl = window.location.origin + basePath + '/data/dashboard_data.json';
@@ -58,7 +64,11 @@
                 });
             }
             function render(data) {
+                // #region agent log
+                _log('render entered', { hasData: !!data, hasSummary: !!(data && data.summary) }, 'H4');
+                // #endregion
                 if (!data || !data.summary) return;
+                try {
                 const s = data.summary || {};
                 const el = document.getElementById('summary');
                 el.innerHTML = '<div class="metrics">' +
@@ -112,19 +122,31 @@
                     document.getElementById('charts').appendChild(div4);
                     Plotly.newPlot(div4, [{ x: prices.map(d => d.date), y: prices.map(d => d.price), type: 'scatter', mode: 'lines', name: 'Henry Hub', line: { color: '#17becf' } }], { title: 'Henry Hub price', xaxis: { title: 'Date' }, yaxis: { title: '$/MMBtu' }, template: 'plotly_white', margin: { t: 40, b: 40 } }, { responsive: true });
                 }
+                } catch (e) {
+                    // #region agent log
+                    _log('render threw', { message: e && e.message, name: e && e.name }, 'H4');
+                    // #endregion
+                    throw e;
+                }
             }
             function showError(msg) {
                 document.getElementById('summary').innerHTML = '<p style="color:#666;">' + msg + '</p>';
             }
             if (window.DASHBOARD_DATA && window.DASHBOARD_DATA.summary) {
+                // #region agent log
+                _log('using DASHBOARD_DATA from script', {}, 'H1-H2');
+                // #endregion
                 render(window.DASHBOARD_DATA);
                 return;
             }
             fetchJson(RAW_JSON)
                 .then(render)
-                .catch(function() { return fetchJson(sameOriginUrl).then(render); })
-                .catch(function() { return fetchJson('data/dashboard_data.json').then(render); })
-                .catch(function() {
+                .catch(function(err) { _log('fetch failed', { url: RAW_JSON, err: String(err && err.message) }, 'H5'); return fetchJson(sameOriginUrl).then(render); })
+                .catch(function(err) { _log('fetch failed', { url: 'sameOrigin', err: String(err && err.message) }, 'H5'); return fetchJson('data/dashboard_data.json').then(render); })
+                .catch(function(err) {
+                    // #region agent log
+                    _log('all fetches failed, showError', { err: String(err && err.message) }, 'H5');
+                    // #endregion
                     showError('Dashboard data not found. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project, then copy <code>site/data/</code> (dashboard_data.json and dashboard_data.js) into this repo’s <code>data/</code> folder and push.');
                 });
         })();
