@@ -1,8 +1,8 @@
 {
 "summary": {
-"storage_bcf": 2463,
-"storage_5yr_bcf": 2393,
-"surprise_bcf": 70,
+"storage_bcf": 2463.0,
+"storage_5yr_bcf": 2393.0,
+"surprise_bcf": 70.0,
 "surprise_pct": 2.9,
 "price": 5.01,
 "net_change_bcf": null,
@@ -3008,7 +3008,7 @@
 "date": "2026-01-30",
 "value_bcf": 2463.0,
 "five_yr_avg_bcf": 2393.2,
-"net_change_bcf": NaN
+"net_change_bcf": null
 }
 ],
 "prices": [
