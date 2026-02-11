@@ -7,13 +7,25 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
-        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin: 20px 0; }
+        .dashboard-page { width: 100%; max-width: none; padding: 20px 24px 40px; box-sizing: border-box; }
+        .dashboard-page h1 { margin-bottom: 0.25rem; }
+        .dashboard-page .subtitle { color: #666; margin-bottom: 1rem; }
+        .info-box { background: #e8f4fd; border: 1px solid #007bff; border-radius: 8px; padding: 12px 16px; margin-bottom: 1.25rem; font-size: 0.95rem; }
+        .metrics { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin: 20px 0; }
+        @media (max-width: 900px) { .metrics { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); } }
         .metric { background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center; }
         .metric .value { font-size: 1.5rem; font-weight: 600; }
         .metric .label { font-size: 0.8rem; color: #666; }
-        .chart-wrap { background: #fff; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid #ddd; }
-        .takeaway { background: #e8f4fd; border: 1px solid #007bff; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }
-        .main-content { max-width: 960px; margin: 20px auto; padding: 20px; }
+        .takeaway { background: #f0f8f0; border: 1px solid #2ca02c; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+        .report-date { font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
+        .chart-section { margin-bottom: 2rem; }
+        .chart-wrap { background: #fff; border-radius: 8px; padding: 16px; margin-bottom: 0.5rem; border: 1px solid #ddd; width: 100%; box-sizing: border-box; }
+        .chart-wrap .js-plotly-plot { width: 100% !important; }
+        .chart-caption { font-size: 0.9rem; color: #555; margin-bottom: 8px; }
+        .chart-filters { margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+        .chart-filters label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.9rem; }
+        .chart-filters input { cursor: pointer; }
+        .section-title { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -38,25 +50,26 @@
         </div>
     </nav>
 
-    <div class="main-content">
-        <h1>Natural Gas Market Dashboard</h1>
-        <p style="color:#666; margin-bottom: 1rem;">Lower 48 storage, 5-yr average, and Henry Hub. Data from EIA; snapshot updated when the site is rebuilt.</p>
+    <div class="main-content dashboard-page">
+        <h1>Natural Gas Market at a Glance</h1>
+        <p class="subtitle">Lower 48 storage, 5-yr average, and Henry Hub. Data from EIA; snapshot updated when the site is rebuilt.</p>
+        <div class="info-box">
+            <strong>How to read this:</strong> The numbers at the top tell you if we have <em>more</em> or <em>less</em> gas in storage than usual. More than usual → often lower prices. Less than usual → higher price risk. The charts below show the same story over time.
+        </div>
         <div id="summary"></div>
         <div id="takeaway" class="takeaway" style="display:none;"></div>
+        <div id="report-date" class="report-date" style="display:none;"></div>
+        <div class="section-title">Charts — Lower 48</div>
         <div id="charts"></div>
     </div>
     <script src="https://raw.githubusercontent.com/alphahawk-dev6/alphahawk-dev6.github.io/main/data/dashboard_data.js"></script>
     <script>
         (function() {
-            // #region agent log
-            var _log = function(msg, data, hyp) {
-                fetch('http://127.0.0.1:7243/ingest/0885db74-7893-4015-970b-29d54a69a249',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'markets.html',message:msg,data:data||{},hypothesisId:hyp||'',timestamp:Date.now(),runId:'debug1'})}).catch(function(){});
-            };
-            _log('IIFE start', { hasDASHBOARD_DATA: !!window.DASHBOARD_DATA, hasSummary: !!(window.DASHBOARD_DATA && window.DASHBOARD_DATA.summary), origin: window.location.origin, href: window.location.href }, 'H1-H3');
-            // #endregion
             var RAW_JSON = 'https://raw.githubusercontent.com/alphahawk-dev6/alphahawk-dev6.github.io/main/data/dashboard_data.json';
             var basePath = window.location.pathname.replace(/\/[^/]*$/, '') || '';
             var sameOriginUrl = window.location.origin + basePath + '/data/dashboard_data.json';
+            var CHART_H = 520;
+            var layoutBase = { template: 'plotly_white', autosize: true, hovermode: 'x unified', legend: { orientation: 'h', yanchor: 'bottom', y: 1.02, xanchor: 'center', x: 0.5 }, margin: { t: 48, b: 48, l: 56, r: 24 } };
             function fetchJson(url) {
                 return fetch(url).then(function(r) {
                     if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -64,91 +77,104 @@
                 });
             }
             function render(data) {
-                // #region agent log
-                _log('render entered', { hasData: !!data, hasSummary: !!(data && data.summary) }, 'H4');
-                // #endregion
                 if (!data || !data.summary) return;
-                try {
-                const s = data.summary || {};
-                const el = document.getElementById('summary');
+                var s = data.summary || {};
+                var el = document.getElementById('summary');
                 el.innerHTML = '<div class="metrics">' +
                     (s.storage_bcf != null ? '<div class="metric"><span class="value">' + Number(s.storage_bcf).toLocaleString() + '</span><span class="label">Gas in storage (Bcf)</span></div>' : '') +
-                    (s.storage_5yr_bcf != null ? '<div class="metric"><span class="value">' + Number(s.storage_5yr_bcf).toLocaleString() + '</span><span class="label">5-yr avg (Bcf)</span></div>' : '') +
+                    (s.storage_5yr_bcf != null ? '<div class="metric"><span class="value">' + Number(s.storage_5yr_bcf).toLocaleString() + '</span><span class="label">Usual (5-yr avg)</span></div>' : '') +
                     (s.surprise_bcf != null ? '<div class="metric"><span class="value">' + (s.surprise_bcf >= 0 ? '+' : '') + s.surprise_bcf + '</span><span class="label">Vs usual (Bcf)</span></div>' : '') +
+                    (s.net_change_bcf != null ? '<div class="metric"><span class="value">' + (s.net_change_bcf >= 0 ? '+' : '') + s.net_change_bcf + '</span><span class="label">Last week’s change (Bcf)</span></div>' : '') +
                     (s.price != null ? '<div class="metric"><span class="value">$' + s.price + '</span><span class="label">Henry Hub ($/MMBtu)</span></div>' : '') +
                     '</div>';
                 if (s.takeaway) {
-                    const t = document.getElementById('takeaway');
-                    t.textContent = s.takeaway;
+                    var t = document.getElementById('takeaway');
+                    t.textContent = 'In short: ' + s.takeaway;
                     t.style.display = 'block';
                 }
-                const storage = data.storage_l48 || [];
+                if (s.report_date) {
+                    var rd = document.getElementById('report-date');
+                    try {
+                        var d = new Date(s.report_date);
+                        rd.textContent = 'Latest storage report: ' + d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                    } catch (e) {
+                        rd.textContent = 'Latest storage report: ' + s.report_date;
+                    }
+                    rd.style.display = 'block';
+                }
+                var storage = data.storage_l48 || [];
                 if (storage.length) {
-                    const dates = storage.map(d => d.date);
-                    const actual = storage.map(d => d.value_bcf);
-                    const avg5 = storage.map(d => d.five_yr_avg_bcf);
-                    const layout1 = { title: 'Gas in storage over time', xaxis: { title: 'Date' }, yaxis: { title: 'Bcf' }, template: 'plotly_white', margin: { t: 40, b: 40 } };
-                    const trace1 = { x: dates, y: actual, name: 'Actual', type: 'scatter', mode: 'lines', line: { color: '#1f77b4' } };
-                    const trace2 = { x: dates, y: avg5, name: '5-yr avg', type: 'scatter', mode: 'lines', line: { color: '#ff7f0e', dash: 'dash' } };
-                    const div1 = document.createElement('div');
-                    div1.className = 'chart-wrap';
-                    div1.id = 'chart-storage';
+                    var dates = storage.map(function(d) { return d.date; });
+                    var actual = storage.map(function(d) { return d.value_bcf; });
+                    var avg5 = storage.map(function(d) { return d.five_yr_avg_bcf; });
+                    var layout1 = Object.assign({}, layoutBase, { title: 'Gas in storage over time — Lower 48', xaxis: { title: 'Date' }, yaxis: { title: 'Gas in storage (Bcf)' }, height: CHART_H });
+                    var trace1 = { x: dates, y: actual, name: 'Actual', type: 'scatter', mode: 'lines', line: { color: '#1f77b4' }, visible: true };
+                    var trace2 = { x: dates, y: avg5, name: 'Usual (5-yr)', type: 'scatter', mode: 'lines', line: { color: '#ff7f0e', dash: 'dash' }, visible: true };
+                    var div1 = document.createElement('div');
+                    div1.className = 'chart-section';
+                    div1.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Blue = actual storage; orange dashed = 5-yr average. Toggle lines below.</p>' +
+                        '<div class="chart-filters"><label><input type="checkbox" id="f1-actual" checked> Actual</label><label><input type="checkbox" id="f1-5yr" checked> 5-yr avg</label></div>';
+                    var wrap1 = document.createElement('div');
+                    wrap1.className = 'chart-wrap';
+                    wrap1.id = 'chart-storage';
+                    div1.appendChild(wrap1);
                     document.getElementById('charts').appendChild(div1);
-                    Plotly.newPlot(div1, [trace1, trace2].filter(t => t.y.some(v => v != null)), layout1, { responsive: true });
+                    Plotly.newPlot(wrap1, [trace1, trace2].filter(function(t) { return t.y.some(function(v) { return v != null; }); }), layout1, { responsive: true });
+                    document.getElementById('f1-actual').onchange = function() { Plotly.restyle(wrap1, { visible: [this.checked, document.getElementById('f1-5yr').checked] }); };
+                    document.getElementById('f1-5yr').onchange = function() { Plotly.restyle(wrap1, { visible: [document.getElementById('f1-actual').checked, this.checked] }); };
                 }
-                const netChange = (data.storage_l48 || []).map(d => d.net_change_bcf);
-                const datesStorage = (data.storage_l48 || []).map(d => d.date);
-                if (datesStorage.length && netChange.some(v => v != null)) {
-                    const colors = netChange.map(v => v >= 0 ? '#2ca02c' : '#d62728');
-                    const div2 = document.createElement('div');
-                    div2.className = 'chart-wrap';
-                    div2.id = 'chart-flow';
+                var netChange = storage.map(function(d) { return d.net_change_bcf; });
+                var datesStorage = storage.map(function(d) { return d.date; });
+                if (datesStorage.length && netChange.some(function(v) { return v != null; })) {
+                    var colors = netChange.map(function(v) { return v >= 0 ? '#2ca02c' : '#d62728'; });
+                    var div2 = document.createElement('div');
+                    div2.className = 'chart-section';
+                    div2.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Green = injection (we added gas); red = withdrawal (we drew gas).</p>';
+                    var wrap2 = document.createElement('div');
+                    wrap2.className = 'chart-wrap';
+                    wrap2.id = 'chart-flow';
+                    div2.appendChild(wrap2);
                     document.getElementById('charts').appendChild(div2);
-                    Plotly.newPlot(div2, [{ x: datesStorage, y: netChange, type: 'bar', marker: { color: colors }, name: 'Weekly change' }], { title: 'Weekly injection (green) / withdrawal (red)', xaxis: { title: 'Date' }, yaxis: { title: 'Bcf' }, template: 'plotly_white', margin: { t: 40, b: 40 }, showlegend: false }, { responsive: true });
+                    var layout2 = Object.assign({}, layoutBase, { title: 'Weekly injection vs withdrawal — Lower 48', xaxis: { title: 'Date' }, yaxis: { title: 'Bcf' }, height: CHART_H, showlegend: false });
+                    Plotly.newPlot(wrap2, [{ x: datesStorage, y: netChange, type: 'bar', marker: { color: colors }, name: 'Weekly change' }], layout2, { responsive: true });
                 }
-                const corr = data.correlation || [];
+                var corr = data.correlation || [];
                 if (corr.length) {
-                    const div3 = document.createElement('div');
-                    div3.className = 'chart-wrap';
-                    div3.id = 'chart-corr';
+                    var div3 = document.createElement('div');
+                    div3.className = 'chart-section';
+                    div3.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Each point = one week. More gas than usual (right) often lines up with lower prices (down).</p>';
+                    var wrap3 = document.createElement('div');
+                    wrap3.className = 'chart-wrap';
+                    wrap3.id = 'chart-corr';
+                    div3.appendChild(wrap3);
                     document.getElementById('charts').appendChild(div3);
-                    Plotly.newPlot(div3, [{ x: corr.map(d => d.surprise_bcf), y: corr.map(d => d.price), type: 'scatter', mode: 'markers', name: 'Price vs storage surprise', marker: { size: 6, color: '#9467bd', opacity: 0.7 } }], { title: 'Price vs storage surprise (vs 5-yr)', xaxis: { title: 'Storage surprise (Bcf)' }, yaxis: { title: '$/MMBtu' }, template: 'plotly_white', margin: { t: 40, b: 40 } }, { responsive: true });
+                    var layout3 = Object.assign({}, layoutBase, { title: 'Price vs storage surprise (vs 5-yr)', xaxis: { title: 'Storage surprise (Bcf)' }, yaxis: { title: '$/MMBtu' }, height: CHART_H });
+                    Plotly.newPlot(wrap3, [{ x: corr.map(function(d) { return d.surprise_bcf; }), y: corr.map(function(d) { return d.price; }), type: 'scatter', mode: 'markers', name: 'Price vs surprise', marker: { size: 6, color: '#9467bd', opacity: 0.7 } }], layout3, { responsive: true });
                 }
-                const prices = data.prices || [];
+                var prices = data.prices || [];
                 if (prices.length) {
-                    const div4 = document.createElement('div');
-                    div4.className = 'chart-wrap';
-                    div4.id = 'chart-price';
+                    var div4 = document.createElement('div');
+                    div4.className = 'chart-section';
+                    div4.innerHTML = '<p class="chart-caption"><strong>What to look for:</strong> Henry Hub benchmark price over time.</p>';
+                    var wrap4 = document.createElement('div');
+                    wrap4.className = 'chart-wrap';
+                    wrap4.id = 'chart-price';
+                    div4.appendChild(wrap4);
                     document.getElementById('charts').appendChild(div4);
-                    Plotly.newPlot(div4, [{ x: prices.map(d => d.date), y: prices.map(d => d.price), type: 'scatter', mode: 'lines', name: 'Henry Hub', line: { color: '#17becf' } }], { title: 'Henry Hub price', xaxis: { title: 'Date' }, yaxis: { title: '$/MMBtu' }, template: 'plotly_white', margin: { t: 40, b: 40 } }, { responsive: true });
-                }
-                } catch (e) {
-                    // #region agent log
-                    _log('render threw', { message: e && e.message, name: e && e.name }, 'H4');
-                    // #endregion
-                    throw e;
+                    var layout4 = Object.assign({}, layoutBase, { title: 'Henry Hub price', xaxis: { title: 'Date' }, yaxis: { title: '$/MMBtu' }, height: CHART_H });
+                    Plotly.newPlot(wrap4, [{ x: prices.map(function(d) { return d.date; }), y: prices.map(function(d) { return d.price; }), type: 'scatter', mode: 'lines', name: 'Henry Hub', line: { color: '#17becf' } }], layout4, { responsive: true });
                 }
             }
             function showError(msg) {
                 document.getElementById('summary').innerHTML = '<p style="color:#666;">' + msg + '</p>';
             }
             if (window.DASHBOARD_DATA && window.DASHBOARD_DATA.summary) {
-                // #region agent log
-                _log('using DASHBOARD_DATA from script', {}, 'H1-H2');
-                // #endregion
                 render(window.DASHBOARD_DATA);
                 return;
             }
-            fetchJson(RAW_JSON)
-                .then(render)
-                .catch(function(err) { _log('fetch failed', { url: RAW_JSON, err: String(err && err.message) }, 'H5'); return fetchJson(sameOriginUrl).then(render); })
-                .catch(function(err) { _log('fetch failed', { url: 'sameOrigin', err: String(err && err.message) }, 'H5'); return fetchJson('data/dashboard_data.json').then(render); })
-                .catch(function(err) {
-                    // #region agent log
-                    _log('all fetches failed, showError', { err: String(err && err.message) }, 'H5');
-                    // #endregion
-                    showError('Dashboard data not found. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project, then copy <code>site/data/</code> (dashboard_data.json and dashboard_data.js) into this repo’s <code>data/</code> folder and push.');
-                });
+            fetchJson(RAW_JSON).then(render).catch(function() { return fetchJson(sameOriginUrl).then(render); }).catch(function() { return fetchJson('data/dashboard_data.json').then(render); }).catch(function() {
+                showError('Dashboard data not found. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project, then copy <code>site/data/</code> (dashboard_data.json and dashboard_data.js) into this repo’s <code>data/</code> folder and push.');
+            });
         })();
     </script>
 </body>
