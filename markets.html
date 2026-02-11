@@ -45,7 +45,7 @@
         <div id="takeaway" class="takeaway" style="display:none;"></div>
         <div id="charts"></div>
     </div>
-
+    <script src="https://raw.githubusercontent.com/alphahawk-dev6/alphahawk-dev6.github.io/main/data/dashboard_data.js"></script>
     <script>
         (function() {
             var RAW_JSON = 'https://raw.githubusercontent.com/alphahawk-dev6/alphahawk-dev6.github.io/main/data/dashboard_data.json';
@@ -116,12 +116,16 @@
             function showError(msg) {
                 document.getElementById('summary').innerHTML = '<p style="color:#666;">' + msg + '</p>';
             }
+            if (window.DASHBOARD_DATA && window.DASHBOARD_DATA.summary) {
+                render(window.DASHBOARD_DATA);
+                return;
+            }
             fetchJson(RAW_JSON)
                 .then(render)
                 .catch(function() { return fetchJson(sameOriginUrl).then(render); })
                 .catch(function() { return fetchJson('data/dashboard_data.json').then(render); })
                 .catch(function() {
-                    showError('Dashboard data not found. Ensure <code>data/dashboard_data.json</code> is in the repo and push. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project, then copy <code>site/data/dashboard_data.json</code> into this repo’s <code>data/</code> folder.');
+                    showError('Dashboard data not found. Run <code>python scripts/export_for_github_pages.py</code> in the EIA project, then copy <code>site/data/</code> (dashboard_data.json and dashboard_data.js) into this repo’s <code>data/</code> folder and push.');
                 });
         })();
     </script>
