@@ -3,130 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Principal Component Analysis: Interest Rates, Treasury Yields, and Current Outlook</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link to external CSS file -->
+    <title>Treasury Yields — PCA Analysis | Xander Balog</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-
-    
-        
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        h1, h2, h3 {
-            color: black;
-        }
-
-        h1 {
-        background-color: black; /* Black background for the title */
-        color: white; /* White text color */
-        padding: 20px; /* Increased padding for space inside */
-        text-align: center; /* Center the text */
-        border-radius: 8px; /* Rounded corners */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
-        margin-top: -20px; /* Moves the title higher on the page */
-        margin-bottom: 20px; /* Adds space below */
-        width: fit-content; /* Keep the title container to only as wide as the content */
-        margin-left: auto;
-        margin-right: auto; /* Centers the title horizontally */
-}
-
-
-        
-        /* Sidebar Styling */
-        .sidebar {
-    position: fixed; /* Keeps the sidebar fixed in position */
-    top: 52px; /* Below sticky nav */
-    left: 0;
-    width: 250px;
-    height: calc(100% - 50px); /* Fill height below nav */
-    background-color: #f4f4f4; /* Light gray background */
-    padding-top: 20px; /* Top padding for spacing */
-    padding-left: 20px; /* Left padding for spacing */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    z-index: 900; /* Ensure it stays below the nav; should be lower than nav's z-index */
-}
-
-.sidebar h2 {
-    font-size: 1.5em; /* Font size for headings */
-    color: #2eb9d5; /* Heading color */
-    margin-bottom: 20px; /* Space below the heading */
-}
-
-.sidebar a {
-    text-decoration: none; /* No underline on links */
-    color: black; /* Link color */
-    display: block; /* Block display for full-width links */
-    margin: 10px 0; /* Vertical spacing between links */
-    font-size: 1.1em; /* Font size for links */
-    transition: color 0.3s; /* Smooth color transition on hover */
-}
-
-.sidebar a:hover {
-    color: #2eb9d5; /* Change link color on hover */
-}
-
-p {
-    text-indent: 40px; /* Adjust the value as needed */
-    font-size: 1.10rem;
-    color: #202020;
-    margin-bottom: 30px; /* Increase this value to increase spacing between paragraphs */
-    line-height: 1.5; /* Adjust this value for line spacing */
-}
-
-        /* Content Area Styling */
-        .content {
-            margin-left: 270px; /* Space for sidebar */
-            padding: 20px;
-            margin-top: 60px; /* Space for nav */
-        }
-        li {
-        text-indent: 40px; /* Adjust the value as needed */
-        font-size: 1rem;
-        color: #202020;
-        margin-bottom: 20px; /* Increase this value to increase spacing between paragraphs */
-        line-height: 1.5; /* Adjust this value for line spacing */
-        }
-        .section {
-            margin-bottom: 40px;
-        }
-
-        ul {
-            margin-left: 20px;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .table th, .table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-
-        .table th {
-            background-color: #f4f4f4; /* Background for header */
-        }
-        .image-container {
-    text-align: center;
-    margin: 20px auto; /* Center the container horizontally */
-    width: 800px; /* Set the desired width for the container */
-    height: auto; /* Remove the fixed height */
-    overflow: visible; /* Allow the full image to be displayed */
-}
-
-.image-container img {
-    max-width: 100%; /* Ensure the image scales responsively */
-    height: auto; /* Maintain aspect ratio */
-}
-
-
+        .pca-page .pca-content { max-width: 820px; margin: 0 auto; padding: 2rem 32px 4rem; }
+        .pca-page .pca-toc { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; padding: 1rem 0 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid #e8e8e8; font-size: 0.88rem; }
+        .pca-page .pca-toc a { color: #555; text-decoration: none; }
+        .pca-page .pca-toc a:hover { color: #0d0d0d; }
+        .pca-page h1 { font-size: 1.75rem; font-weight: 700; color: #1a1a1a; margin: 0 0 1.5rem; letter-spacing: -0.02em; }
+        .pca-page .section { margin-bottom: 2.5rem; }
+        .pca-page .section h2 { font-size: 1.15rem; font-weight: 600; color: #1a1a1a; margin: 0 0 0.75rem; padding-top: 0.25rem; }
+        .pca-page p { font-size: 1rem; color: #333; margin: 0 0 1rem; line-height: 1.6; text-indent: 0; }
+        .pca-page ul, .pca-page li { margin: 0 0 0.5rem; padding-left: 1.25rem; font-size: 1rem; color: #333; line-height: 1.5; }
+        .pca-page .table { width: 100%; max-width: 480px; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        .pca-page .table th, .pca-page .table td { padding: 10px 12px; border: 1px solid #e8e8e8; text-align: left; }
+        .pca-page .table th { background: #f8f9fa; font-weight: 600; color: #1a1a1a; }
+        .pca-page .image-container { text-align: center; margin: 1.5rem 0; max-width: 100%; }
+        .pca-page .image-container img { max-width: 100%; height: auto; border-radius: 6px; }
     </style>
 </head>
-<body class="site-v2">
+<body class="site-v2 pca-page">
     <nav class="nav-v2">
         <div class="logo"><a href="index.html">Xander Balog</a></div>
         <div class="nav-items">
@@ -140,30 +36,25 @@ p {
         </div>
     </nav>
 
-    <!-- Sidebar for Table of Contents -->
-    <div class="sidebar">
-        <h2>Table of Contents</h2>
-        <a href="#introduction">Introduction</a>
-        <a href="#thesis">Thesis Statement</a>
-        <a href="#pca-explained">Principal Component Analysis Explained</a>
-        <a href="#pca-treasury">PCA on U.S. Treasury Bills and Notes</a>
-        <a href="#findings">Key Findings</a>
-        <a href="#interpretation">Findings and Interpretation</a>
-        <a href="#implications">Implications for Investors</a>
-        <a href="#methodology">Methodology – Data Collection</a>
-        <a href="#commentary">Commentary</a>
-        <a href="#conclusion">Conclusion</a>
-        <a href="#sources and disclosures">Sources and Disclosures</a>
-    </div>
+    <div class="pca-content">
+        <h1>Principal Component Analysis: Interest Rates, Treasury Yields, and Current Outlook</h1>
+        <nav class="pca-toc" aria-label="On this page">
+            <a href="#introduction">Introduction</a>
+            <a href="#thesis">Thesis</a>
+            <a href="#pca-explained">PCA Explained</a>
+            <a href="#pca-treasury">Treasury Bills & Notes</a>
+            <a href="#findings">Key Findings</a>
+            <a href="#interpretation">Interpretation</a>
+            <a href="#implications">Implications</a>
+            <a href="#methodology">Methodology</a>
+            <a href="#commentary">Commentary</a>
+            <a href="#conclusion">Conclusion</a>
+            <a href="#sources-disclosures">Sources</a>
+        </nav>
 
-    <!-- Main content -->
-    <div class="content">
-        <h1 id="introduction">Principal Component Analysis: Interest Rates, Treasury Yields, and Current Outlook</h1>
-
-        <!-- Image insert location -->
-    <div class="image-container">
-        <img src="Designer.png" alt="Description of the image" />
-    </div>    
+        <div class="image-container">
+            <img src="Designer.png" alt="Treasury yields analysis" />
+        </div>    
     
         <div class="section">
             <h2 id="introduction">Introduction</h2>
@@ -374,7 +265,7 @@ p {
         </p>
         </div>
         <div class="section">
-            <h2 id="sources and disclosures">Sources and Disclosures</h2>
+            <h2 id="sources-disclosures">Sources and Disclosures</h2>
             <p>This is not financial advice, but rather a research report that examines treasury yields and the factors that affect them. The following sources were used to help formulate my thoughts, analyze yields, and structure my analysis:</p>
             <ul>
                 <li><strong><a href="https://www.aptech.com/blog/applications-of-principal-components-analysis-in-finance/">Applications of Principal Components Analysis in Finance | Aptech</a></strong> — The PCA model I (Xander Balog) built was adapted from a GAUSS model created by Eric at Aptech, which I rebuilt in Python, utilizing up-to-date interest rates and treasury bill/note data. All commentary in this report was crafted by me, Xander Balog, with enhancements by ChatGPT. ChatGPT also assisted in the translation of GAUSS to Python.</li>
