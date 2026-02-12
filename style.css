@@ -114,6 +114,9 @@ footer {
     width: 100%;
 }
 
+/* Site v2: unified look across pages */
+body.site-v2 { background: #fafafa; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+body.site-v2 .main-content { max-width: 1280px; margin-left: auto; margin-right: auto; padding: 2rem 32px; }
 /* Site v2: unified nav (sticky) and footer */
 body.site-v2 nav.nav-v2,
 nav.nav-v2 {

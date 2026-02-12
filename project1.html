@@ -37,7 +37,7 @@
         /* Sidebar Styling */
         .sidebar {
     position: fixed; /* Keeps the sidebar fixed in position */
-    top: 100px; /* Below the nav */
+    top: 52px; /* Below sticky nav */
     left: 0;
     width: 250px;
     height: calc(100% - 50px); /* Fill height below nav */
@@ -126,22 +126,17 @@ p {
 
     </style>
 </head>
-<body>
-    <nav>
-        <div class="logo">Xander's Portfolio</div>
+<body class="site-v2">
+    <nav class="nav-v2">
+        <div class="logo"><a href="index.html">Xander Balog</a></div>
         <div class="nav-items">
             <a href="index.html">Home</a>
+            <a href="project.html">Case Work</a>
+            <a href="markets.html">Systems</a>
+            <a href="project1.html">Treasury Yields</a>
+            <a href="apa-stock-pitch.html">APA</a>
             <a href="about.html">About</a>
-            <a href="project.html">Projects</a>
             <a href="contact.html">Contact</a>
-            <div class="dropdown">
-                <button class="dropbtn">Dashboards</button>
-                <div class="dropdown-content">
-                    <a href="#" onclick="loadDashboard('globalMarkets')">Global Markets/Indices</a>
-                    <a href="#" onclick="loadDashboard('forex')">Forex Dashboard</a>
-                    <a href="#" onclick="loadDashboard('crypto')">Crypto Dashboard</a>
-                </div>
-            </div>
         </div>
     </nav>
 
@@ -388,5 +383,8 @@ p {
             </ul>
         </div>
     </div>
+    <footer class="footer-v2">
+        <p>&copy; 2025 Xander Balog</p>
+    </footer>
 </body>
 </html>
