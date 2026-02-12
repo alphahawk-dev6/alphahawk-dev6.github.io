@@ -114,9 +114,12 @@ footer {
     width: 100%;
 }
 
-/* Site v2: unified nav and footer (financial decision systems positioning) */
+/* Site v2: unified nav (sticky) and footer */
 body.site-v2 nav.nav-v2,
 nav.nav-v2 {
+    position: sticky;
+    top: 0;
+    z-index: 100;
     width: 100%;
     background: #0d0d0d;
     color: #fff;
@@ -126,7 +129,7 @@ nav.nav-v2 {
     align-items: center;
     border-radius: 0;
     margin: 0;
-    box-shadow: none;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06);
 }
 nav.nav-v2 .logo { color: #fff; font-weight: 600; font-size: 1.05rem; margin-left: 0; }
 nav.nav-v2 .logo a { color: inherit; text-decoration: none; }

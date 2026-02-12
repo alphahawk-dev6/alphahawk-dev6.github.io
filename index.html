@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xander Balog — Financial Decision Systems</title>
+    <title>Xander Balog</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* --- Design system: minimal, high-signal, founder-operator --- */
+        /* --- Design system: evidence-backed, full-width, sticky nav --- */
         body.site-v2 { margin: 0; background: #fafafa; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #1a1a1a; line-height: 1.5; }
-        .site-v2 .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-        .site-v2 .container-wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        .site-v2 .container { max-width: 880px; margin: 0 auto; padding: 0 32px; }
+        .site-v2 .container-wide { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
 
-        /* Nav: minimal, dark bar */
+        /* Nav: sticky, full width, always visible on scroll */
         .site-v2 nav.nav-v2 {
-            width: 100%; background: #0d0d0d; color: #fff; padding: 14px 24px;
+            position: sticky; top: 0; z-index: 100;
+            width: 100%; background: #0d0d0d; color: #fff; padding: 14px 32px;
             display: flex; justify-content: space-between; align-items: center;
-            border-radius: 0; margin: 0; box-shadow: none;
+            border-radius: 0; margin: 0; box-shadow: 0 1px 0 rgba(255,255,255,0.06);
         }
         .site-v2 nav.nav-v2 .logo { color: #fff; font-weight: 600; font-size: 1.05rem; margin-left: 0; }
         .site-v2 nav.nav-v2 .logo a { color: inherit; text-decoration: none; }
@@ -25,10 +26,10 @@
         }
         .site-v2 nav.nav-v2 .nav-items a:hover { color: #fff; }
 
-        /* Hero: sharp headline + positioning + system visual */
+        /* Hero: full-bleed */
         .hero-v2 {
             position: relative; background: #0d0d0d; color: #fff;
-            padding: 5rem 24px 6rem; overflow: hidden;
+            padding: 5rem 32px 6rem; overflow: hidden;
         }
         .hero-v2 .hero-visual {
             position: absolute; inset: 0; opacity: 0.12;
@@ -50,17 +51,18 @@
         .hero-v2 .positioning { font-size: clamp(1rem, 2vw, 1.15rem); color: rgba(255,255,255,0.88); max-width: 640px; margin: 0 0 0.75rem; line-height: 1.55; }
         .hero-v2 .subline { font-size: 0.95rem; color: rgba(255,255,255,0.55); }
 
-        /* What I Do: 4 pillars */
+        /* Sections: use space, wider where it helps */
         .section-v2 { padding: 4rem 0; }
+        .section-v2 .container-wide { padding: 0 32px; }
         .section-v2 h2 { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #666; margin: 0 0 2rem; }
-        .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; }
+        .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem; }
         .pillar { border-left: 2px solid #e0e0e0; padding-left: 1.25rem; }
         .pillar h3 { font-size: 1rem; font-weight: 600; margin: 0 0 0.5rem; color: #1a1a1a; }
         .pillar p { font-size: 0.9rem; color: #444; margin: 0 0 0.5rem; line-height: 1.55; }
         .pillar .example { font-size: 0.8rem; color: #666; font-style: italic; }
 
-        /* Selected Impact: metric blurbs */
-        .impact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+        /* Selected Impact: metric blurbs, wider grid */
+        .impact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
         .impact-card {
             background: #fff; border: 1px solid #e8e8e8; padding: 1.5rem;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -104,63 +106,63 @@
     <header class="hero-v2">
         <div class="hero-visual" aria-hidden="true"></div>
         <div class="container">
-            <h1>I build financial decision systems.</h1>
-            <p class="positioning">I operate at the intersection of data science, markets, and executive strategy. I translate messy data into capital allocation decisions.</p>
-            <p class="subline">Production-grade modeling, reconciliation, and dashboards in regulated, multi-stakeholder environments.</p>
+            <h1>I build data systems that support financial decision-making.</h1>
+            <p class="positioning">My work sits at the intersection of financial modeling, market data, and operational analytics.</p>
+            <p class="subline">Modeling, reconciliation, and dashboards in regulated and multi-stakeholder contexts.</p>
         </div>
     </header>
 
     <section class="section-v2">
-        <div class="container">
+        <div class="container-wide">
             <h2>What I Do</h2>
             <div class="pillars">
                 <div class="pillar">
                     <h3>Financial Modeling & Scenario Systems</h3>
-                    <p>Scenario and valuation models for M&A, divestiture, wind-down, and turnaround. Built for boards and executives who need clear inputs to capital allocation.</p>
-                    <p class="example">Example: ROI models for hospital system strategic decisions (divestiture, wind-down, turnaround).</p>
+                    <p>Scenario and valuation models for M&A, divestiture, wind-down, and turnaround.</p>
+                    <p class="example">ROI models for hospital system strategic decisions (divestiture, wind-down, turnaround).</p>
                 </div>
                 <div class="pillar">
                     <h3>Data Infrastructure & Reconciliation</h3>
-                    <p>Pipelines, audit trails, and reconciliation at scale. Data that has to be right before it touches a decision.</p>
-                    <p class="example">Example: Reconciled 1.1M+ records in wildfire recovery; identified $15M in overclaims for audit.</p>
+                    <p>Pipelines, audit trails, and reconciliation at scale.</p>
+                    <p class="example">Reconciled 1.1M+ records in wildfire recovery; identified $15M in overclaims for audit.</p>
                 </div>
                 <div class="pillar">
                     <h3>Predictive Risk & Market Analytics</h3>
-                    <p>Risk models, backtests, and market analytics for allocators. Built at an investment firm and extended in consulting.</p>
-                    <p class="example">Example: Predictive risk models and backtests at a $6B AUM investment firm.</p>
+                    <p>Risk models, backtests, and market analytics.</p>
+                    <p class="example">Predictive risk models and backtests at a $6B AUM investment firm.</p>
                 </div>
                 <div class="pillar">
                     <h3>Executive Decision Dashboards</h3>
-                    <p>Dashboards and automated financial pipelines that executives and ops teams actually use. From natural gas storage to P&amp;L and strategic KPIs.</p>
-                    <p class="example">Example: Natural gas storage analytics platform with automated EIA pipelines and commentary; executive dashboards for financial pipelines.</p>
+                    <p>Dashboards and automated financial pipelines—natural gas storage, P&amp;L, strategic KPIs.</p>
+                    <p class="example">Natural gas storage platform with automated EIA pipelines and commentary; financial pipelines in consulting.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section class="section-v2" style="padding-top: 0;">
-        <div class="container">
+        <div class="container-wide">
             <h2>Selected Impact</h2>
             <div class="impact-grid">
                 <div class="impact-card">
                     <div class="metric">$15M in overclaims identified</div>
-                    <p>Wildfire recovery: reconciled 1.1M+ records, flagged overclaims for audit. High-stakes, multi-stakeholder environment.</p>
+                    <p>Wildfire recovery: reconciled 1.1M+ records, flagged overclaims for audit.</p>
                 </div>
                 <div class="impact-card">
                     <div class="metric">$6B AUM</div>
-                    <p>Built predictive risk models and backtests at an investment firm. Production use in a regulated context.</p>
+                    <p>Predictive risk models and backtests at an investment firm. Production use.</p>
                 </div>
                 <div class="impact-card">
                     <div class="metric">Hospital system strategic decisions</div>
-                    <p>ROI models for divestiture, wind-down, and turnaround. Executive-level decision leverage on capital allocation.</p>
+                    <p>ROI models for divestiture, wind-down, and turnaround—used in executive decisions.</p>
                 </div>
                 <div class="impact-card">
                     <div class="metric">Natural gas storage platform</div>
-                    <p>Automated EIA pipelines, regional analytics, and commentary. Shipped system used for storage and price interpretation.</p>
+                    <p>Automated EIA pipelines, regional analytics, commentary. Shipped and in use.</p>
                 </div>
                 <div class="impact-card">
                     <div class="metric">Executive dashboards & pipelines</div>
-                    <p>Automated financial pipelines and dashboards in consulting. Multi-stakeholder, audit-aware delivery.</p>
+                    <p>Automated financial pipelines and dashboards. Multi-stakeholder delivery.</p>
                 </div>
             </div>
         </div>
@@ -169,7 +171,7 @@
     <section class="section-v2">
         <div class="container">
             <div class="narrative-v2">
-                <p>Competitive soccer in Boston sharpened the same thing that shows up in my work: discipline under pressure, reading the field, and no tolerance for unforced errors. I discovered data through applying analytics to finance, graduated early, and did a Master's in Business Analytics (STEM) at Carnegie Mellon. I build decision infrastructure for capital allocators—systems that turn messy data into clear inputs. Quantitative rigor and systems thinking, not buzzwords.</p>
+                <p>Competitive soccer in Boston—discipline under pressure, no unforced errors. I discovered data through analytics applied to finance, graduated early, MSBA (STEM) at Carnegie Mellon. I've touched $6B AUM environments, reconciled 1.1M records in government recovery, built ROI models used in executive decisions. I work with commodity fundamentals and time series. Here's what I've built.</p>
             </div>
             <h2 style="margin-top: 2.5rem; margin-bottom: 0.5rem;">Next</h2>
             <div class="cta-v2">
