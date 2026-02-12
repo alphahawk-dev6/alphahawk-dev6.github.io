@@ -3,147 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Xander's Portfolio</title>
+    <title>Xander Balog — Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-        }
-
-        nav {
-            width: 90%;
-            background-color: rgba(255, 255, 255, 0.9);
-            color: black;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .logo {
-            margin-left: 20px;
-            font-size: 1.5em;
-        }
-
-        .nav-items {
-            margin-right: 20px;
-        }
-
-        .nav-items a {
-            color: black;
-            text-decoration: none;
-            margin: 0 10px;
-            font-size: 1em;
-        }
-
-        .nav-items a:hover {
-            text-decoration: underline;
-        }
-
-        .main-content {
+        body.home-page { margin: 0; background: #f8f9fa; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; }
+        .home-hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            padding: 4rem 2rem 5rem;
             text-align: center;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
-            width: 90%;
-            max-width: 800px;
         }
-
-        h1 {
-            font-size: 2.5em;
+        .home-hero h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 0 0 0.5rem; font-weight: 700; letter-spacing: -0.02em; }
+        .home-hero .tagline { font-size: clamp(1rem, 2.2vw, 1.25rem); opacity: 0.9; max-width: 520px; margin: 0 auto; line-height: 1.5; }
+        .home-hero .tagline strong { color: #e94560; font-weight: 600; }
+        .home-intro {
+            max-width: 720px;
+            margin: -2rem auto 0;
+            padding: 2rem 1.5rem;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 1;
         }
-
-        p {
-            font-size: 1.2em;
-            color: #666;
-        }
-
-        .cta-button {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+        .home-intro p { margin: 0 0 1rem; color: #444; line-height: 1.65; font-size: 1.05rem; }
+        .home-intro p:last-child { margin-bottom: 0; }
+        .home-intro a { color: #0f3460; font-weight: 600; text-decoration: none; }
+        .home-intro a:hover { text-decoration: underline; }
+        .home-featured { max-width: 1000px; margin: 3rem auto 4rem; padding: 0 1.5rem; }
+        .home-featured h2 { text-align: center; font-size: 1.5rem; color: #1a1a2e; margin-bottom: 2rem; }
+        .home-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .home-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.75rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid #eee;
+            transition: transform 0.2s, box-shadow 0.2s;
             text-decoration: none;
-            margin-top: 20px;
-            display: inline-block;
-            transition: background-color 0.3s;
+            color: inherit;
+            display: block;
         }
-
-        .cta-button:hover {
-            background-color: #555;
-        }
-
-        .content-container {
-            display: flex;
-            justify-content: space-between;
-            width: 90%;
-            margin-top: 30px;
-        }
-
-        .tradingview-widget-container {
-            width: 70%;
-        }
-
-        .news-container {
-            width: 25%;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            overflow-y: auto;
-            max-height: 610px; /* Same height as TradingView */
-            font-size: 0.9em; /* Smaller font for better readability */
-        }
-
-        .news-container h2 {
-            text-align: center;
-            color: #007bff; /* Header color */
-            margin-bottom: 15px; /* Margin below the header */
-            font-size: 1.5em; /* Header size */
-            border-bottom: 2px solid #007bff; /* Bottom border for emphasis */
-            padding-bottom: 10px; /* Padding below the header */
-        }
-
-        .news-item {
-            margin: 15px 0;
-            padding: 10px;
-            border-bottom: 1px solid #e0e0e0; /* Light border between articles */
-        }
-
-        .news-item h3 {
-            font-size: 1.2em; /* Slightly larger title */
-            color: #333;
-            margin: 0 0 5px; /* Margin for spacing */
-        }
-
-        .news-item p {
-            margin: 5px 0; /* More spacing for description and other info */
-            color: #555;
-        }
-
-        .news-item a {
-            color: #007bff; /* Link color */
-            text-decoration: none; /* Remove underline */
-        }
-
-        .news-item a:hover {
-            text-decoration: underline; /* Underline on hover */
-        }
-
+        .home-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+        .home-card .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+        .home-card h3 { margin: 0 0 0.5rem; font-size: 1.2rem; color: #1a1a2e; }
+        .home-card p { margin: 0; font-size: 0.95rem; color: #555; line-height: 1.5; }
+        .home-card .card-cta { margin-top: 1rem; font-size: 0.9rem; font-weight: 600; color: #0f3460; }
+        .home-card:hover .card-cta { text-decoration: underline; }
+        .home-focus { max-width: 720px; margin: 0 auto 4rem; padding: 0 1.5rem; text-align: center; }
+        .home-focus h2 { font-size: 1.25rem; color: #444; margin-bottom: 1rem; }
+        .home-focus ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1.5rem; }
+        .home-focus li { font-size: 0.95rem; color: #555; }
+        .home-focus li::before { content: "• "; color: #e94560; font-weight: bold; }
     </style>
 </head>
-<body>
-
+<body class="home-page">
     <nav>
         <div class="logo">Xander's Portfolio</div>
         <div class="nav-items">
@@ -156,100 +70,52 @@
         </div>
     </nav>
 
-    <div class="main-content">
-        <h1>Commodities & Markets</h1>
-        <p>Hi, I'm Xander Balog — business analyst and MSBA candidate focused on trading, portfolio management, and energy markets. Here you'll find natural gas storage and price analysis (EIA data), equity research, and project work.</p>
-        <a href="markets.html" class="cta-button">Natural Gas Dashboard</a>
-        <a href="apa-stock-pitch.html" class="cta-button" style="margin-left: 10px;">APA Stock Pitch</a>
-        <a href="project.html" class="cta-button" style="margin-left: 10px;">All Projects</a>
-    </div>
+    <header class="home-hero">
+        <h1>Xander Balog</h1>
+        <p class="tagline">Data-driven analyst building toward <strong>trading & portfolio management</strong> — MSBA candidate, commodities & equity research.</p>
+    </header>
 
-    <div class="content-container">
-        <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-container">
-            <div id="tradingview_12345"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-            <script type="text/javascript">
-                new TradingView.widget({
-                    "width": "100%",
-                    "height": 610,
-                    "symbol": "SPY",
-                    "interval": "D",
-                    "timezone": "Etc/UTC",
-                    "theme": "light",
-                    "style": "1",
-                    "locale": "en",
-                    "toolbar_bg": "#f1f3f6",
-                    "enable_publishing": false,
-                    "allow_symbol_change": true,
-                    "container_id": "tradingview_12345"
-                });
-            </script>
+    <section class="home-intro">
+        <p>I'm a business analyst by training, now focused on the transition into trading and investment management. I combine analytics with market intuition: from leading quantitative work at <strong>SAIL</strong> (Strategic Alternative Investments & Learning) to stock pitch competitions and energy market analysis.</p>
+        <p>This site highlights <a href="markets.html">natural gas storage & price analysis</a> (EIA data), <a href="apa-stock-pitch.html">equity research</a>, and <a href="project.html">project work</a>. For the full story, see <a href="about.html">About</a>.</p>
+    </section>
+
+    <section class="home-featured">
+        <h2>Featured work</h2>
+        <div class="home-cards">
+            <a href="markets.html" class="home-card">
+                <div class="card-icon">📊</div>
+                <h3>Natural Gas Dashboard</h3>
+                <p>EIA storage, 5-yr averages, Henry Hub — regional compare and trend analysis.</p>
+                <span class="card-cta">View dashboard →</span>
+            </a>
+            <a href="apa-stock-pitch.html" class="home-card">
+                <div class="card-icon">📈</div>
+                <h3>APA Stock Pitch</h3>
+                <p>GFA competition: thesis, valuation, commodity exposure, and key risks.</p>
+                <span class="card-cta">Read summary & deck →</span>
+            </a>
+            <a href="project.html" class="home-card">
+                <div class="card-icon">🔬</div>
+                <h3>Projects</h3>
+                <p>PCA on Treasury yields, portfolio analysis, and other applied work.</p>
+                <span class="card-cta">See projects →</span>
+            </a>
         </div>
-        <!-- TradingView Widget END -->
+    </section>
 
-        <!-- News Section BEGIN -->
-        <div class="news-container" id="news-container">
-            <h2>Latest Market News</h2>
-            <div id="news-content">
-                <!-- News articles will be dynamically populated here -->
-            </div>
-        </div>
-        <!-- News Section END -->
-    </div>
+    <section class="home-focus">
+        <h2>Focus areas</h2>
+        <ul>
+            <li>Energy & commodities</li>
+            <li>Equity research & valuation</li>
+            <li>Quantitative & data-driven strategy</li>
+        </ul>
+    </section>
 
-    <script>
-        // Function to fetch news from APIs
-        async function fetchNews() {
-            const apiKey = '0339b96847474b21a7c37595ea998a71'; // Replace with your actual News API Key
-            const keywords = 'finance OR "stock market"';
-            const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(keywords)}&sortBy=publishedAt&apiKey=${apiKey}`; // Use keywords and sort by publication date
-    
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                console.log('Fetched data:', data); // Log the fetched data
-    
-                const newsContainer = document.getElementById('news-content'); // Change this to news-content for innerHTML assignment
-                newsContainer.innerHTML = ''; // Clear previous news
-    
-                if (data.articles && data.articles.length > 0) {
-                    data.articles.forEach(article => {
-                        const newsItem = document.createElement('div');
-                        newsItem.classList.add('news-item'); // Add class for styling
-                        newsItem.innerHTML = `
-                            <h3>${article.title}</h3>
-                            <p>${article.description}</p>
-                            <p><strong>Source:</strong> ${article.source.name} | <strong>Published At:</strong> ${new Date(article.publishedAt).toLocaleString()}</p>
-                            <a href="${article.url}" target="_blank">Read more</a>
-                        `;
-                        newsContainer.appendChild(newsItem);
-                    });
-                } else {
-                    newsContainer.innerHTML += '<p>No articles found related to the search query.</p>'; // Display if no articles are found
-                }
-            } catch (error) {
-                console.error('Error fetching news:', error);
-                const newsContainer = document.getElementById('news-content'); // Change this to news-content for error message
-                newsContainer.innerHTML = '<p>Error fetching news. Please try again later.</p>';
-            }
-        }
-        
-        // Call the fetchNews function when the page loads
-        window.onload = fetchNews;
-
-    </script>
-
-    <footer style="background-color: black; color: white; text-align: center; padding: 10px 0; position: relative; bottom: 0; width: 100%;">
-        <h1> Pursue Passion, Avoid Comfort </h1>
-        <p>&copy; 2024 Xander Balog
-        </p>
-
+    <footer>
+        <h1>Pursue Passion, Avoid Comfort</h1>
+        <p>&copy; 2024 Xander Balog</p>
     </footer>
-
 </body>
 </html>
