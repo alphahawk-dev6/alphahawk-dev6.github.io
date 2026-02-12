@@ -114,6 +114,40 @@ footer {
     width: 100%;
 }
 
+/* Site v2: unified nav and footer (financial decision systems positioning) */
+body.site-v2 nav.nav-v2,
+nav.nav-v2 {
+    width: 100%;
+    background: #0d0d0d;
+    color: #fff;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0;
+    margin: 0;
+    box-shadow: none;
+}
+nav.nav-v2 .logo { color: #fff; font-weight: 600; font-size: 1.05rem; margin-left: 0; }
+nav.nav-v2 .logo a { color: inherit; text-decoration: none; }
+nav.nav-v2 .nav-items a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    margin: 0 0 0 28px;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+nav.nav-v2 .nav-items a:hover { color: #fff; }
+footer.footer-v2 {
+    background: #0d0d0d;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.85rem;
+}
+footer.footer-v2 p { margin: 0; }
+footer.footer-v2 h1 { display: none; }
+
 /* Contact Form Styles */
 .contact-content {
     display: flex;

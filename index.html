@@ -3,119 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xander Balog — Portfolio</title>
+    <title>Xander Balog — Financial Decision Systems</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body.home-page { margin: 0; background: #f8f9fa; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; }
-        .home-hero {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: #fff;
-            padding: 4rem 2rem 5rem;
-            text-align: center;
+        /* --- Design system: minimal, high-signal, founder-operator --- */
+        body.site-v2 { margin: 0; background: #fafafa; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #1a1a1a; line-height: 1.5; }
+        .site-v2 .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+        .site-v2 .container-wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+        /* Nav: minimal, dark bar */
+        .site-v2 nav.nav-v2 {
+            width: 100%; background: #0d0d0d; color: #fff; padding: 14px 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-radius: 0; margin: 0; box-shadow: none;
         }
-        .home-hero h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 0 0 0.5rem; font-weight: 700; letter-spacing: -0.02em; }
-        .home-hero .tagline { font-size: clamp(1rem, 2.2vw, 1.25rem); opacity: 0.9; max-width: 520px; margin: 0 auto; line-height: 1.5; }
-        .home-hero .tagline strong { color: #e94560; font-weight: 600; }
-        .home-intro {
-            max-width: 720px;
-            margin: -2rem auto 0;
-            padding: 2rem 1.5rem;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            position: relative;
-            z-index: 1;
+        .site-v2 nav.nav-v2 .logo { color: #fff; font-weight: 600; font-size: 1.05rem; margin-left: 0; }
+        .site-v2 nav.nav-v2 .logo a { color: inherit; text-decoration: none; }
+        .site-v2 nav.nav-v2 .nav-items a {
+            color: rgba(255,255,255,0.85); text-decoration: none; margin: 0 0 0 28px;
+            font-size: 0.9rem; transition: color 0.2s;
         }
-        .home-intro p { margin: 0 0 1rem; color: #444; line-height: 1.65; font-size: 1.05rem; }
-        .home-intro p:last-child { margin-bottom: 0; }
-        .home-intro a { color: #0f3460; font-weight: 600; text-decoration: none; }
-        .home-intro a:hover { text-decoration: underline; }
-        .home-featured { max-width: 1000px; margin: 3rem auto 4rem; padding: 0 1.5rem; }
-        .home-featured h2 { text-align: center; font-size: 1.5rem; color: #1a1a2e; margin-bottom: 2rem; }
-        .home-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .home-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 1.75rem;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            border: 1px solid #eee;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
+        .site-v2 nav.nav-v2 .nav-items a:hover { color: #fff; }
+
+        /* Hero: sharp headline + positioning + system visual */
+        .hero-v2 {
+            position: relative; background: #0d0d0d; color: #fff;
+            padding: 5rem 24px 6rem; overflow: hidden;
         }
-        .home-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-        .home-card .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-        .home-card h3 { margin: 0 0 0.5rem; font-size: 1.2rem; color: #1a1a2e; }
-        .home-card p { margin: 0; font-size: 0.95rem; color: #555; line-height: 1.5; }
-        .home-card .card-cta { margin-top: 1rem; font-size: 0.9rem; font-weight: 600; color: #0f3460; }
-        .home-card:hover .card-cta { text-decoration: underline; }
-        .home-focus { max-width: 720px; margin: 0 auto 4rem; padding: 0 1.5rem; text-align: center; }
-        .home-focus h2 { font-size: 1.25rem; color: #444; margin-bottom: 1rem; }
-        .home-focus ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1.5rem; }
-        .home-focus li { font-size: 0.95rem; color: #555; }
-        .home-focus li::before { content: "• "; color: #e94560; font-weight: bold; }
+        .hero-v2 .hero-visual {
+            position: absolute; inset: 0; opacity: 0.12;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+        .hero-v2 .hero-visual::before {
+            content: ''; position: absolute; top: 20%; left: 15%; width: 120px; height: 120px;
+            border: 1px solid rgba(255,255,255,0.15); border-radius: 50%;
+        }
+        .hero-v2 .hero-visual::after {
+            content: ''; position: absolute; bottom: 25%; right: 20%; width: 80px; height: 80px;
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
+        }
+        .hero-v2 .container { position: relative; z-index: 1; }
+        .hero-v2 h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; letter-spacing: -0.03em; margin: 0 0 1rem; }
+        .hero-v2 .positioning { font-size: clamp(1rem, 2vw, 1.15rem); color: rgba(255,255,255,0.88); max-width: 640px; margin: 0 0 0.75rem; line-height: 1.55; }
+        .hero-v2 .subline { font-size: 0.95rem; color: rgba(255,255,255,0.55); }
+
+        /* What I Do: 4 pillars */
+        .section-v2 { padding: 4rem 0; }
+        .section-v2 h2 { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #666; margin: 0 0 2rem; }
+        .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; }
+        .pillar { border-left: 2px solid #e0e0e0; padding-left: 1.25rem; }
+        .pillar h3 { font-size: 1rem; font-weight: 600; margin: 0 0 0.5rem; color: #1a1a1a; }
+        .pillar p { font-size: 0.9rem; color: #444; margin: 0 0 0.5rem; line-height: 1.55; }
+        .pillar .example { font-size: 0.8rem; color: #666; font-style: italic; }
+
+        /* Selected Impact: metric blurbs */
+        .impact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+        .impact-card {
+            background: #fff; border: 1px solid #e8e8e8; padding: 1.5rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .impact-card:hover { border-color: #ccc; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+        .impact-card .metric { font-size: 1.1rem; font-weight: 700; color: #0d0d0d; margin: 0 0 0.5rem; }
+        .impact-card p { font-size: 0.88rem; color: #555; margin: 0; line-height: 1.5; }
+
+        /* Narrative */
+        .narrative-v2 { background: #fff; border: 1px solid #e8e8e8; padding: 2rem 2.5rem; }
+        .narrative-v2 p { font-size: 0.95rem; color: #333; margin: 0; line-height: 1.65; max-width: 640px; }
+
+        /* CTA */
+        .cta-v2 { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+        .cta-v2 a {
+            display: inline-block; padding: 12px 20px; background: #0d0d0d; color: #fff;
+            text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: background 0.2s;
+        }
+        .cta-v2 a:hover { background: #333; }
+        .cta-v2 a.cta-outline { background: transparent; color: #0d0d0d; border: 2px solid #0d0d0d; }
+        .cta-v2 a.cta-outline:hover { background: #0d0d0d; color: #fff; }
+
+        /* Footer */
+        .site-v2 footer.footer-v2 { background: #0d0d0d; color: rgba(255,255,255,0.6); text-align: center; padding: 2rem; font-size: 0.85rem; }
+        .site-v2 footer.footer-v2 p { margin: 0; }
     </style>
 </head>
-<body class="home-page">
-    <nav>
-        <div class="logo">Xander's Portfolio</div>
+<body class="site-v2">
+    <nav class="nav-v2">
+        <div class="logo"><a href="index.html">Xander Balog</a></div>
         <div class="nav-items">
             <a href="index.html">Home</a>
+            <a href="project.html">Case Work</a>
+            <a href="markets.html">Systems</a>
+            <a href="apa-stock-pitch.html">APA</a>
             <a href="about.html">About</a>
-            <a href="project.html">Projects</a>
             <a href="contact.html">Contact</a>
-            <a href="markets.html">Natural Gas</a>
-            <a href="apa-stock-pitch.html">APA Stock Pitch</a>
         </div>
     </nav>
 
-    <header class="home-hero">
-        <h1>Xander Balog</h1>
-        <p class="tagline">Data-driven analyst building toward <strong>trading & portfolio management</strong> — MSBA candidate, commodities & equity research.</p>
+    <header class="hero-v2">
+        <div class="hero-visual" aria-hidden="true"></div>
+        <div class="container">
+            <h1>I build financial decision systems.</h1>
+            <p class="positioning">I operate at the intersection of data science, markets, and executive strategy. I translate messy data into capital allocation decisions.</p>
+            <p class="subline">Production-grade modeling, reconciliation, and dashboards in regulated, multi-stakeholder environments.</p>
+        </div>
     </header>
 
-    <section class="home-intro">
-        <p>I'm a business analyst by training, now focused on the transition into trading and investment management. I combine analytics with market intuition: from leading quantitative work at <strong>SAIL</strong> (Strategic Alternative Investments & Learning) to stock pitch competitions and energy market analysis.</p>
-        <p>This site highlights <a href="markets.html">natural gas storage & price analysis</a> (EIA data), <a href="apa-stock-pitch.html">equity research</a>, and <a href="project.html">project work</a>. For the full story, see <a href="about.html">About</a>.</p>
-    </section>
-
-    <section class="home-featured">
-        <h2>Featured work</h2>
-        <div class="home-cards">
-            <a href="markets.html" class="home-card">
-                <div class="card-icon">📊</div>
-                <h3>Natural Gas Dashboard</h3>
-                <p>EIA storage, 5-yr averages, Henry Hub — regional compare and trend analysis.</p>
-                <span class="card-cta">View dashboard →</span>
-            </a>
-            <a href="apa-stock-pitch.html" class="home-card">
-                <div class="card-icon">📈</div>
-                <h3>APA Stock Pitch</h3>
-                <p>GFA competition: thesis, valuation, commodity exposure, and key risks.</p>
-                <span class="card-cta">Read summary & deck →</span>
-            </a>
-            <a href="project.html" class="home-card">
-                <div class="card-icon">🔬</div>
-                <h3>Projects</h3>
-                <p>PCA on Treasury yields, portfolio analysis, and other applied work.</p>
-                <span class="card-cta">See projects →</span>
-            </a>
+    <section class="section-v2">
+        <div class="container">
+            <h2>What I Do</h2>
+            <div class="pillars">
+                <div class="pillar">
+                    <h3>Financial Modeling & Scenario Systems</h3>
+                    <p>Scenario and valuation models for M&A, divestiture, wind-down, and turnaround. Built for boards and executives who need clear inputs to capital allocation.</p>
+                    <p class="example">Example: ROI models for hospital system strategic decisions (divestiture, wind-down, turnaround).</p>
+                </div>
+                <div class="pillar">
+                    <h3>Data Infrastructure & Reconciliation</h3>
+                    <p>Pipelines, audit trails, and reconciliation at scale. Data that has to be right before it touches a decision.</p>
+                    <p class="example">Example: Reconciled 1.1M+ records in wildfire recovery; identified $15M in overclaims for audit.</p>
+                </div>
+                <div class="pillar">
+                    <h3>Predictive Risk & Market Analytics</h3>
+                    <p>Risk models, backtests, and market analytics for allocators. Built at an investment firm and extended in consulting.</p>
+                    <p class="example">Example: Predictive risk models and backtests at a $6B AUM investment firm.</p>
+                </div>
+                <div class="pillar">
+                    <h3>Executive Decision Dashboards</h3>
+                    <p>Dashboards and automated financial pipelines that executives and ops teams actually use. From natural gas storage to P&amp;L and strategic KPIs.</p>
+                    <p class="example">Example: Natural gas storage analytics platform with automated EIA pipelines and commentary; executive dashboards for financial pipelines.</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="home-focus">
-        <h2>Focus areas</h2>
-        <ul>
-            <li>Energy & commodities</li>
-            <li>Equity research & valuation</li>
-            <li>Quantitative & data-driven strategy</li>
-        </ul>
+    <section class="section-v2" style="padding-top: 0;">
+        <div class="container">
+            <h2>Selected Impact</h2>
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="metric">$15M in overclaims identified</div>
+                    <p>Wildfire recovery: reconciled 1.1M+ records, flagged overclaims for audit. High-stakes, multi-stakeholder environment.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="metric">$6B AUM</div>
+                    <p>Built predictive risk models and backtests at an investment firm. Production use in a regulated context.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="metric">Hospital system strategic decisions</div>
+                    <p>ROI models for divestiture, wind-down, and turnaround. Executive-level decision leverage on capital allocation.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="metric">Natural gas storage platform</div>
+                    <p>Automated EIA pipelines, regional analytics, and commentary. Shipped system used for storage and price interpretation.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="metric">Executive dashboards & pipelines</div>
+                    <p>Automated financial pipelines and dashboards in consulting. Multi-stakeholder, audit-aware delivery.</p>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <footer>
-        <h1>Pursue Passion, Avoid Comfort</h1>
-        <p>&copy; 2024 Xander Balog</p>
+    <section class="section-v2">
+        <div class="container">
+            <div class="narrative-v2">
+                <p>Competitive soccer in Boston sharpened the same thing that shows up in my work: discipline under pressure, reading the field, and no tolerance for unforced errors. I discovered data through applying analytics to finance, graduated early, and did a Master's in Business Analytics (STEM) at Carnegie Mellon. I build decision infrastructure for capital allocators—systems that turn messy data into clear inputs. Quantitative rigor and systems thinking, not buzzwords.</p>
+            </div>
+            <h2 style="margin-top: 2.5rem; margin-bottom: 0.5rem;">Next</h2>
+            <div class="cta-v2">
+                <a href="markets.html">View Systems</a>
+                <a href="project.html">See Case Work</a>
+                <a href="apa-stock-pitch.html">Explore Models</a>
+                <a href="contact.html" class="cta-outline">Contact</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-v2">
+        <p>&copy; 2025 Xander Balog</p>
     </footer>
 </body>
 </html>
